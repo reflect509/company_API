@@ -1,0 +1,2 @@
+\COPY subdepartments(subdepartment_name) FROM 'C:\Users\malac\OneDrive\Рабочий стол\работа\professionals\imports\subdepartments_import.csv' WITH (HEADER, FORMAT CSV, DELIMITER ';');
+\COPY workers(full_name, birthdate, phone, office, email, is_subdepartment_head, job_position, subdepartment_name) FROM 'C:\Users\malac\OneDrive\Рабочий стол\работа\professionals\imports\workers_import.csv' WITH (HEADER, FORMAT CSV, DELIMITER ';');
