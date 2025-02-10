@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS public.documents
     document_id serial PRIMARY KEY,
 	title varchar(255) NOT NULL,
     date_approval date NOT NULL,
-    date_edit date,
+    date_edit date NOT NULL,
     status character varying(255),
     document_type character varying(255) NOT NULL,
     field character varying(255),
@@ -57,7 +57,7 @@ CREATE TABLE document_comments (
 	document_id int REFERENCES documents(document_id),
 	text text NOT NULL,
 	date_created timestamp NOT NULL,
-	date_updated timestamp,
+	date_updated timestamp NOT NULL,
 	author_id int NOT NULL REFERENCES workers(worker_id)
 );
 
