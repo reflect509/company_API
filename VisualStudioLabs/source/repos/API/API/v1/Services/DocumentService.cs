@@ -36,7 +36,7 @@ namespace API.v1.Services
                     .Select(c => new CommentDto
                     {
                         Id = c.CommentId,
-                        DocumentId = (int)c.DocumentId,
+                        DocumentId = c.DocumentId,
                         Text = c.Text,
                         DateCreated = d.DateApproval.ToString("yyyy-MM-dd HH:mm:ss"),
                         DateUpdated = d.DateEdit.ToString("yyyy-MM-dd HH:mm:ss"),

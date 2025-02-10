@@ -7,7 +7,7 @@ public partial class DocumentComment
 {
     public int CommentId { get; set; }
 
-    public int? DocumentId { get; set; }
+    public int DocumentId { get; set; }
 
     public string Text { get; set; } = null!;
 
