@@ -9,9 +9,9 @@ public partial class Document
 
     public string Title { get; set; } = null!;
 
-    public DateTime? DateApproval { get; set; }
+    public DateTime DateApproval { get; set; }
 
-    public DateTime? DateEdit { get; set; }
+    public DateTime DateEdit { get; set; }
 
     public string? Status { get; set; }
 

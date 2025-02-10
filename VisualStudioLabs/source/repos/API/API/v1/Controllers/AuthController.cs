@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.v1.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace API.v1.Controllers
                 {
                     Message = "Некорректные данные",
                     ErrorCode = 1001
-                });
+                }); 
             }
 
             var token = await authService.Authenticate(request.Name, request.Password);

@@ -19,8 +19,8 @@ namespace API.v1.Services
                 {
                     Id = d.DocumentId,
                     Title = d.Title,
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
+                    DateCreated = d.DateApproval.ToString("yyyy-MM-dd HH:mm:ss"),
+                    DateUpdated = d.DateEdit.ToString("yyyy-MM-dd HH:mm:ss"),
                     Category = d.DocumentType,
                     HasComments = d.DocumentComments.FirstOrDefault() != null
                 })
@@ -38,8 +38,8 @@ namespace API.v1.Services
                         Id = c.CommentId,
                         DocumentId = (int)c.DocumentId,
                         Text = c.Text,
-                        DateCreated = DateTime.Now,
-                        DateUpdated = DateTime.Now,
+                        DateCreated = d.DateApproval.ToString("yyyy-MM-dd HH:mm:ss"),
+                        DateUpdated = d.DateEdit.ToString("yyyy-MM-dd HH:mm:ss"),
                         Author = new AuthorDto
                         {
                             FullName = c.Author.FullName,
@@ -75,8 +75,8 @@ namespace API.v1.Services
                     Id = comment.CommentId,
                     DocumentId = (int)comment.DocumentId,
                     Text = comment.Text,
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
+                    DateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    DateUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     Author = new AuthorDto
                     {
                         FullName = comment.Author.FullName,

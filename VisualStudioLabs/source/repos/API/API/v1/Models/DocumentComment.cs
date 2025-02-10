@@ -11,9 +11,9 @@ public partial class DocumentComment
 
     public string Text { get; set; } = null!;
 
-    public DateTime? DateCreated { get; set; }
+    public DateTime DateCreated { get; set; }
 
-    public DateTime? DateUpdated { get; set; }
+    public DateTime DateUpdated { get; set; }
 
     public int AuthorId { get; set; }
 
