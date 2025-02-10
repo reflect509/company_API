@@ -17,7 +17,7 @@ namespace API.v1.Controllers
         }
 
         [HttpPost("SignIn")]
-        public async Task<IActionResult> SignIn([FromBody] User request)
+        public async Task<IActionResult> SignIn([FromBody] AppUser request)
         {
             if (!ModelState.IsValid)
             {

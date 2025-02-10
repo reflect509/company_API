@@ -23,7 +23,7 @@ public partial class ApiDbContext : DbContext
 
     public virtual DbSet<Subdepartment> Subdepartments { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<AppUser> Users { get; set; }
 
     public virtual DbSet<Worker> Workers { get; set; }
 
@@ -125,7 +125,7 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("subdepartment_name");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<AppUser>(entity =>
         {
             entity.ToTable("users");
 
