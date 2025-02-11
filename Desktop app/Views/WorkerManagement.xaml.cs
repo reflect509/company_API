@@ -12,11 +12,11 @@ using System.Windows.Shapes;
 namespace Desktop_app
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WorkerManagement.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WorkerManagement : Window
     {
-        public MainWindow()
+        public WorkerManagement()
         {
             InitializeComponent();
         }
