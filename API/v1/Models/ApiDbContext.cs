@@ -23,7 +23,7 @@ public partial class ApiDbContext : DbContext
 
     public virtual DbSet<Subdepartment> Subdepartments { get; set; }
 
-    public virtual DbSet<AppUser> Users { get; set; }
+    public virtual DbSet<AppUser> AppUsers { get; set; }
 
     public virtual DbSet<Worker> Workers { get; set; }
 
@@ -127,11 +127,11 @@ public partial class ApiDbContext : DbContext
 
         modelBuilder.Entity<AppUser>(entity =>
         {
-            entity.ToTable("users");
+            entity.ToTable("app_users");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name).HasColumnName("name");
-            entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.Name).HasColumnName("user_name");
+            entity.Property(e => e.Password).HasColumnName("user_password");
         });
 
         modelBuilder.Entity<Worker>(entity =>

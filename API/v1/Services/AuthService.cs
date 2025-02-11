@@ -51,7 +51,7 @@ namespace API.v1.Services
 
         private async Task<bool> CheckUser(string username, string password)
         {
-            return await dbContext.Users
+            return await dbContext.AppUsers
                 .AsNoTracking()
                 .AnyAsync(w => w.Name == username && w.Password == password);
         }
