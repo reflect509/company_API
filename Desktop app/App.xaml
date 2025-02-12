@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:Desktop_app"
              StartupUri="\Views\WorkerManagement.xaml">
     <Application.Resources>
-         
+        <Color x:Key="DarkGreen">#78B24B</Color>
+        <Color x:Key="LightGreen">#89FC43</Color>
+        <Color x:Key="Yellow">#F8FC43</Color>
+        <Color x:Key="Red">#FC4343</Color>
+
+        <SolidColorBrush x:Key="DarkGreenBrush" Color="{StaticResource DarkGreen}"/>
+        <SolidColorBrush x:Key="LightGreenBrush" Color="{StaticResource LightGreen}"/>
+        <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource Yellow}"/>
+        <SolidColorBrush x:Key="RedBrush" Color="{StaticResource Red}"/>
     </Application.Resources>
 </Application>
