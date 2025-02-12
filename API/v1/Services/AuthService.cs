@@ -33,7 +33,6 @@ namespace API.v1.Services
                         new Claim(ClaimTypes.Name, username),
                     }),
 
-                    Expires = DateTime.UtcNow.AddHours(2),
                     Issuer = configuration["Jwt:Issuer"],
                     Audience = configuration["Jwt:Audience"],
                     SigningCredentials = new SigningCredentials(
@@ -53,7 +52,7 @@ namespace API.v1.Services
         {
             return await dbContext.AppUsers
                 .AsNoTracking()
-                .AnyAsync(w => w.Name == username && w.Password == password);
+                .AnyAsync(w => w.UserName == username && w.UserPassword == password);
         }
     }
 }

@@ -19,6 +19,8 @@ public partial class Document
 
     public string? Field { get; set; }
 
+    public bool? HasComments { get; set; }
+
     public int? AuthorId { get; set; }
 
     public virtual Worker? Author { get; set; }

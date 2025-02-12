@@ -5,9 +5,9 @@ namespace API.v1.Models;
 
 public partial class AppUser
 {
-    public int Id { get; set; }
+    public int UserId { get; set; }
 
-    public string? Name { get; set; }
+    public string UserName { get; set; } = null!;
 
-    public string? Password { get; set; }
+    public string UserPassword { get; set; } = null!;
 }

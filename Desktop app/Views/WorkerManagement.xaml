@@ -26,18 +26,21 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Source="\Images\Logo.png" Height="80" Width="80" Margin="10 10 30 10"/>
-            <TextBlock Grid.Column="1" FontSize="20" Text="Организационная структура" 
-                       Background="White" Padding="10" VerticalAlignment="Center" />
+            <Border CornerRadius="15" Grid.Column="1" Background="White"  VerticalAlignment="Center">
+                <TextBlock FontSize="20" Text="Организационная структура" 
+                            Padding="10"/>
+            </Border>
+            
         </Grid>
 
         <Canvas Grid.Column="0" Grid.Row="1"
-                Margin="30"  Background="LightGray">            
+                Margin="30 30 10 30"  Background="LightGray">            
+            
         </Canvas>
 
         <Grid Grid.Column="1" Grid.Row="1"
-              Margin="30" Background="LightGray">
-            
-        </Grid>           
-        
+              Margin="10 30 30 30" Background="LightGray">
+
+        </Grid>
     </Grid>
 </Window>

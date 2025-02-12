@@ -19,5 +19,5 @@ public partial class DocumentComment
 
     public virtual Worker Author { get; set; } = null!;
 
-    public virtual Document? Document { get; set; }
+    public virtual Document Document { get; set; } = null!;
 }

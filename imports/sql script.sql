@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS public.subdepartments
     subdepartment_id serial PRIMARY KEY,
     subdepartment_name character varying(255) NOT NULL UNIQUE,
     description text,
-    parent_id integer,
-    levels integer
+    parent_id integer
 );
 
 CREATE TABLE IF NOT EXISTS public.workers
@@ -54,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.documents
 
 CREATE TABLE document_comments (
 	comment_id serial PRIMARY KEY,
-	document_id int REFERENCES documents(document_id),
+	document_id int NOT NULL REFERENCES documents(document_id),
 	text text NOT NULL,
 	date_created timestamp NOT NULL,
 	date_updated timestamp NOT NULL,
@@ -83,6 +82,7 @@ CREATE TABLE app_users (
     user_name text NOT NULL,
     user_password text NOT NULL
 );
+
 CREATE INDEX idx_workers_full_name ON workers (full_name);
 CREATE INDEX idx_documents_id ON documents (document_id);
 CREATE INDEX idx_document_comments_id ON document_comments (comment_id);

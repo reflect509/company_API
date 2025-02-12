@@ -28,7 +28,7 @@ namespace API.v1.Controllers
                 }); 
             }
 
-            var token = await authService.Authenticate(request.Name, request.Password);
+            var token = await authService.Authenticate(request.UserName, request.UserPassword);
 
             if (token == null)
             {

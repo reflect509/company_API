@@ -13,7 +13,5 @@ public partial class Subdepartment
 
     public int? ParentId { get; set; }
 
-    public int? Levels { get; set; }
-
     public virtual ICollection<Worker> Workers { get; set; } = new List<Worker>();
 }
