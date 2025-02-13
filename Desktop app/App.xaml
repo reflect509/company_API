@@ -13,5 +13,7 @@
         <SolidColorBrush x:Key="LightGreenBrush" Color="{StaticResource LightGreen}"/>
         <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource Yellow}"/>
         <SolidColorBrush x:Key="RedBrush" Color="{StaticResource Red}"/>
+        
+        
     </Application.Resources>
 </Application>
