@@ -33,10 +33,14 @@
             
         </Grid>
 
-        <Canvas Grid.Column="0" Grid.Row="1"
-                Margin="30 30 10 30"  Background="LightGray">            
-            
-        </Canvas>
+        <ScrollViewer Grid.Column="0" Grid.Row="1"
+                      Margin="30 30 10 30"  Background="LightGray"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <Canvas>
+
+            </Canvas>
+        </ScrollViewer>        
 
         <Grid Grid.Column="1" Grid.Row="1"
               Margin="10 30 30 30" Background="LightGray">
