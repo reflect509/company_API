@@ -152,6 +152,10 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.SubdepartmentName)
                 .HasMaxLength(255)
                 .HasColumnName("subdepartment_name");
+
+            entity.HasOne(d => d.Parent).WithMany(p => p.Children)
+                .HasForeignKey(d => d.ParentId)
+                .HasConstraintName("subdepartments_parent_id_fkey");
         });
 
         modelBuilder.Entity<Worker>(entity =>
