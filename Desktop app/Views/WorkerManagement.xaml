@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Desktop_app"
         mc:Ignorable="d"
-        Title="Управление персоналом" Height="800" Width="1100" WindowStartupLocation="CenterScreen" 
+        Title="Управление персоналом" Height="600" Width="900" WindowStartupLocation="CenterScreen" 
         MinHeight="450" MinWidth="800"
         Icon="\Images\Logo.png">
     <Grid>
