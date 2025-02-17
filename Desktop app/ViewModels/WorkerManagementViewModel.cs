@@ -16,9 +16,10 @@ namespace Desktop_app.ViewModels
     public class WorkerManagementViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler DataLoaded;
         private readonly IApiService apiService;  
         
-        private ObservableCollection<Node> nodes;
+        private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
 
         public ObservableCollection<Node> Nodes
         {
@@ -30,15 +31,15 @@ namespace Desktop_app.ViewModels
             }
         }
 
-        private ObservableCollection<Line> lines;
+        private ObservableCollection<Connection> connections = new ObservableCollection<Connection>();
 
-        public ObservableCollection<Line> Lines
+        public ObservableCollection<Connection> Connections
         {
-            get { return lines; }
+            get { return connections; }
             set 
             { 
-                lines = value;
-                OnPropertychanged(nameof(Lines));
+                connections = value;
+                OnPropertychanged(nameof(Connections));
             }
         }
 
@@ -51,24 +52,20 @@ namespace Desktop_app.ViewModels
 
         private async void LoadDataAsync()
         {
-            var nodes = new ObservableCollection<Node>(await apiService.GetSubdepartmentsAsync());
-            foreach (var node in nodes)
-            {
-                nodes.Add(node);
-            }
-            
-            CalculatePositions();
-            DrawLines();
+            var nodes = await apiService.GetSubdepartmentsAsync();
+            CalculatePositions(nodes);
+            DrawConnections();
+            DataLoaded?.Invoke(this, EventArgs.Empty);
         }
 
-        private void CalculatePositions()
-        {
-            LayoutNodes(Nodes, 0, 0);
+        private void CalculatePositions(IEnumerable<Node> nodes)
+        {            
+            LayoutNodes(nodes.ToList(), level: 0, offsetX: 0);
         }
 
-        private void LayoutNodes(ObservableCollection<Node> nodes, int level, double offsetX)
+        private void LayoutNodes(List<Node> nodes, int level, double offsetX)
         {
-            double horizontalSpacing = 150;
+            double horizontalSpacing = 250;
             double verticalSpacing = 100;
             int index = 0;
 
@@ -76,49 +73,52 @@ namespace Desktop_app.ViewModels
             {
                 node.Level = level;
                 node.Y = level * verticalSpacing;
-
-                node.X = offsetX + index * horizontalSpacing;
+                node.X = offsetX + index * horizontalSpacing;               
                 index++;
+
+                if (!Nodes.Any(n => n.SubdepartmentName == node.SubdepartmentName))
+                {
+                    Nodes.Add(node);
+                }
 
                 if (node.Children != null && node.Children.Count != 0)
                 {
-                    LayoutNodes(new ObservableCollection<Node>(node.Children), level + 1, node.X);
+                    LayoutNodes(new List<Node>(node.Children), level: level + 1, offsetX: node.X);
+                    index++;
                 }
             }
         }
 
-        private void DrawLines()
+        private void DrawConnections()
         {
             foreach (var node in Nodes)
             {
-                DrawLinesForNode(node);
-            }
+                DrawConnectionsForNode(node);
+            }            
         }
 
-        private void DrawLinesForNode(Node parent)
+        private void DrawConnectionsForNode(Node parent)
         {
             if (parent.Children != null)
             {
                 foreach (var child in parent.Children)
                 {                   
-                    double parentCenterX = parent.X + 50; // Assuming node width of 100
+                    double parentCenterX = parent.X + 100; // Assuming node width of 100
                     double parentBottomY = parent.Y + 50;   // Assuming node height of 50
-                    double childCenterX = child.X + 50;
+                    double childCenterX = child.X + 100;
                     double childTopY = child.Y;            
 
-                    var line = new Line
+                    var connection = new Connection
                     {
                         X1 = parentCenterX,
                         Y1 = parentBottomY,
                         X2 = childCenterX,
-                        Y2= childTopY,
-                        Stroke = Brushes.Black,
-                        StrokeThickness = 2
+                        Y2 = childTopY
                     };
 
-                    Lines.Add(line);
+                    Connections.Add(connection);
 
-                    DrawLinesForNode(child);
+                    DrawConnectionsForNode(child);
                 }
             }
         }

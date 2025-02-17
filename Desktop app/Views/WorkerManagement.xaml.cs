@@ -23,33 +23,32 @@ namespace Desktop_app
         public WorkerManagement()
         {
             InitializeComponent();
-            DataContext = new WorkerManagementViewModel(new ApiService(new HttpClient()));
+            var viewModel = new WorkerManagementViewModel(new ApiService(new HttpClient()));
+            this.DataContext = viewModel;
 
-            AddElementsToCanvas();
+            
+            viewModel.DataLoaded += ViewModel_DataLoaded;
         }
 
-        private void AddElementsToCanvas()
+        private void ViewModel_DataLoaded(object? sender, EventArgs e)
         {
-            var viewmodel = DataContext as WorkerManagementViewModel;
+            SetCanvasSize();
+        }
 
-            foreach (var node in viewmodel.Nodes)
-            {
-                Button nodeButton = new Button
-                {
-                    Content = node.Name,
-                    Width = 100,
-                    Height = 50
-                };
+        private void SetCanvasSize()
+        {
+            var viewModel = (WorkerManagementViewModel)this.DataContext;
 
-                Canvas.SetLeft(nodeButton, node.X);
-                Canvas.SetTop(nodeButton, node.Y);
-                SubdepartmentCanvas.Children.Add(nodeButton);
-            }
+            double maxX = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.X) + 150 : 800;
+            double maxY = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.Y) + 100 : 600;
 
-            foreach (var line in viewmodel.Lines)
-            {
-                SubdepartmentCanvas.Children.Add(line);
-            }
+            SubdepartmentCanvas.Width = maxX;
+            SubdepartmentCanvas.Height = maxY;
+        }
+
+        private void Subdepartment_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
         }
     }
 }

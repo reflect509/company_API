@@ -34,19 +34,6 @@ namespace API.v1.Services
             return await context.Subdepartments
                 .FromSqlRaw(query)
                 .ToListAsync();
-            return await context.Subdepartments
-                .Where(s => s.ParentId == null)
-                .Include(s => s.Children)
-                .Select(s => new Subdepartment
-                    {
-                        SubdepartmentId = s.SubdepartmentId,
-                        SubdepartmentName = s.SubdepartmentName,
-                        Description = s.Description,
-                        ParentId = s.ParentId,
-                        Children = s.Children,
-                        Parent = s.Parent
-                    })
-                .ToListAsync();
         }
     }
 }
