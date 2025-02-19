@@ -39,10 +39,11 @@
                       HorizontalScrollBarVisibility="Auto">
             <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top">
                 
-                <ItemsControl ItemsSource="{Binding Nodes}" >
+                <ItemsControl x:Name="NodeListBox" ItemsSource="{Binding Nodes}"
+                         VirtualizingStackPanel.IsVirtualizing="False" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Canvas />
+                            <Canvas/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemContainerStyle>
@@ -53,9 +54,11 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding SubdepartmentName}" Width="200" Height="50" 
+                            <Button Content="{Binding SubdepartmentName}" Width="400" Height="50" 
                                     Background="{StaticResource LightGreenBrush}"
-                                    Click="Subdepartment_Click"/>
+                                    FontSize="12"
+                                    Click="Subdepartment_Click"/>                           
+                                    
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -76,9 +79,43 @@
             </Canvas>
         </ScrollViewer>        
 
-        <Grid Grid.Column="1" Grid.Row="1"
-              Margin="10 30 30 30" Background="LightGray">
+        
+        <ListBox ItemsSource="{Binding Workers}" Grid.Column="1" Grid.Row="1"
+            Margin="10 30 30 30" Background="LightGray">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-        </Grid>
-    </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="7"
+                                    Text="{Binding SubdepartmentName}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="7"
+                                    Text="{Binding JobPosition, StringFormat='- {0}'}"/>
+                            
+                        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="10"
+                                    Text="{Binding FullName}"/>
+                            
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="8"
+                                    Text="{Binding Phone}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="8"
+                                    Text="{Binding Email}"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="7"
+                                    Text="{Binding Office}"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>    
 </Window>

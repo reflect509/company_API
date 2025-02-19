@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace API.v1.Models;
 
@@ -27,6 +28,7 @@ public partial class Worker
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    [JsonIgnore]
     public virtual Subdepartment SubdepartmentNameNavigation { get; set; } = null!;
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();

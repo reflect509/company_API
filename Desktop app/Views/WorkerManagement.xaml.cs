@@ -39,16 +39,17 @@ namespace Desktop_app
         {
             var viewModel = (WorkerManagementViewModel)this.DataContext;
 
-            double maxX = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.X) + 150 : 800;
+            double maxX = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.X) + 450 : 800;
             double maxY = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.Y) + 100 : 600;
 
             SubdepartmentCanvas.Width = maxX;
             SubdepartmentCanvas.Height = maxY;
+
         }
 
         private void Subdepartment_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
+            var viewModel = (WorkerManagementViewModel)this.DataContext;
         }
     }
 }
