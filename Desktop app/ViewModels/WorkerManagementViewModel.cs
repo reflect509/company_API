@@ -1,5 +1,7 @@
 ﻿using Desktop_app.Models;
 using Desktop_app.Services;
+using Desktop_app.Views;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -17,8 +20,9 @@ namespace Desktop_app.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler DataLoaded;
-        private readonly IApiService apiService;  
-        
+        private readonly IApiService apiService;
+        public ICommand NodeClickedCommand { get;}
+
         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
 
         public ObservableCollection<Node> Nodes
@@ -55,10 +59,25 @@ namespace Desktop_app.ViewModels
             }
         }
 
+        private Worker selectedWorker;
+
+        public Worker SelectedWorker
+        {
+            get { return selectedWorker; }
+            set 
+            { 
+                selectedWorker = value;
+                OnPropertychanged();
+                OnWorkerSelected(selectedWorker);
+            }
+        }
+
+
 
         public WorkerManagementViewModel(IApiService apiService)
         {
             this.apiService = apiService;
+            NodeClickedCommand = new RelayCommand<Node>(OnSubdepartmentClicked);
             LoadDataAsync();
         }
 
@@ -82,7 +101,7 @@ namespace Desktop_app.ViewModels
 
         private void CalculatePositions(IEnumerable<Node> nodes)
         {            
-            LayoutNodes(nodes.ToList(), level: 0, offsetX: 0);
+            LayoutNodes(nodes.ToList(), level: 0, offsetX: 10);
         }
 
         private void LayoutNodes(List<Node> nodes, int level, double offsetX)
@@ -98,7 +117,7 @@ namespace Desktop_app.ViewModels
                     continue;
                 }
                 node.Level = level;
-                node.Y = level * verticalSpacing;
+                node.Y = level * verticalSpacing + 10;
                 node.X = offsetX + index * horizontalSpacing;               
                 index++;
 
@@ -171,17 +190,31 @@ namespace Desktop_app.ViewModels
 
         public void OnSubdepartmentClicked(Node selectedNode)
         {
-            var workers = GetWorkers(selectedNode);
+            if (selectedNode == null)
+            {
+                return;
+            }
+
+            List<Worker> workers = GetWorkers(selectedNode);
 
             Workers.Clear();
 
-            foreach (Worker worker in workers)
-            {
-                Workers.Add(worker);
-            }
+            Workers = new ObservableCollection<Worker>(workers);
         }
 
-        public void OnPropertychanged([CallerMemberName] string propertyName = null)
+        private void OnWorkerSelected(Worker worker)
+        {
+            if (worker == null)
+            {
+                return;
+            }
+
+            var workerCardWindow = new WorkerCard();
+            workerCardWindow.DataContext = new WorkerCardViewModel(apiService, worker);
+            workerCardWindow.ShowDialog();
+        }
+
+        private void OnPropertychanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

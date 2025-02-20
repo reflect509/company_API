@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Desktop_app"
         mc:Ignorable="d"
-        Title="Управление персоналом" Height="600" Width="900" WindowStartupLocation="CenterScreen" 
+        Title="Управление персоналом" Height="700" Width="1000" WindowStartupLocation="CenterScreen" 
         MinHeight="450" MinWidth="800"
         Icon="\Images\Logo.png">
     <Grid>
@@ -55,10 +55,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Content="{Binding SubdepartmentName}" Width="400" Height="50" 
-                                    Background="{StaticResource LightGreenBrush}"
-                                    FontSize="12"
-                                    Click="Subdepartment_Click"/>                           
-                                    
+                                    Background="{StaticResource LightGreenBrush}" FontSize="12"
+                                    Command="{Binding DataContext.NodeClickedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>                                                             
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -81,39 +80,45 @@
 
         
         <ListBox ItemsSource="{Binding Workers}" Grid.Column="1" Grid.Row="1"
-            Margin="10 30 30 30" Background="LightGray">
+                 Margin="10 30 30 30" Background="LightGray"
+                 HorizontalContentAlignment="Stretch"
+                 SelectedItem="{Binding SelectedWorker, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Black" BorderThickness="0.5" >
+                        <Grid Background="{StaticResource LightGreenBrush}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="7"
-                                    Text="{Binding SubdepartmentName}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="7"
-                                    Text="{Binding JobPosition, StringFormat='- {0}'}"/>
-                            
-                        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="10"
-                                    Text="{Binding FullName}"/>
-                            
-                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="8"
-                                    Text="{Binding Phone}"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="8"
-                                    Text="{Binding Email}"/>
 
-                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="7"
-                                    Text="{Binding Office}"/>
 
-                    </Grid>
+                            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="9"
+                                        Text="{Binding SubdepartmentName}" Margin="10 10 0 0 "/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="9"
+                                        Text="{Binding JobPosition, StringFormat=' - {0}'}" Margin="10 10 0 0"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="13"
+                                        Text="{Binding FullName}" Margin="10 3 0 0"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" FontSize="10"
+                                        Text="{Binding Phone}" Margin="10 3 0 0"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" FontSize="10"
+                                        Text="{Binding Email}" Margin="10 3 0 0"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" FontSize="9"
+                                        Text="{Binding Office}" Margin="10 4 0 10"/>
+
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
