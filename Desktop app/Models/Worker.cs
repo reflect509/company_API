@@ -9,10 +9,15 @@ namespace Desktop_app.Models
     public class Worker
     {
         public required string FullName { get; set; }
-        public required string Phone { get; set; }
+        public DateOnly? Birthdate { get; set; }
+        public string? Phone { get; set; }
         public required string Office { get; set; }
         public required string Email { get; set; }
+        public bool? IsSubdepartmentHead { get; set; }
         public required string JobPosition { get; set; }
         public required string SubdepartmentName { get; set; }
+        public required string? WorkPhone { get; set; }
+        public string? Supervisor { get; set; }
+        public string? SupervisorSupport { get; set; }
     }
 }

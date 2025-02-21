@@ -13,12 +13,76 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        
 
-        <Grid Background="White" Margin="10">
+        <Grid Grid.Column="0" Background="White" Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">                            
+                <ItemsControl ItemsSource="{Binding SelectedWorker}" VerticalAlignment="Top">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel VerticalAlignment="Stretch">
+                                <TextBlock Text="ФИО работника:" FontSize="20"/>
+                                <TextBox Text="{Binding FullName}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Телефон работника:" FontSize="20"/>
+                                <TextBox Text="{Binding Phone}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Дата рождения работника:" FontSize="20"/>
+                                <TextBox Text="{Binding Birthdate}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Подразделение:" FontSize="20"/>
+                                <TextBox Text="{Binding SubdepartmentName}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Должность:" FontSize="20"/>
+                                <TextBox Text="{Binding JobPosition}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Рабочий телефон:" FontSize="20"/>
+                                <TextBox Text="{Binding WorkPhone}" FontSize="20" Margin="0 0 0 10"/>
+
+                                <TextBlock Text="Почта работника:" FontSize="20"/>
+                                <TextBox Text="{Binding Email}" FontSize="20" Margin="0 0 0 10" />
+
+                                <TextBlock Text="ФИО работника:" FontSize="20"/>
+                                <TextBox Text="{Binding Office}" FontSize="20" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
             
-        </Grid>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
+                <StackPanel Grid.Column="0" VerticalAlignment="Top">
+                    <TextBlock Text="Руководитель"/>
+                    <ComboBox Name="SupervisorComboBox" ItemsSource="{Binding WorkerNames}"/>                    
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="20 0 0 0">
+                    <TextBlock Text="Помощник"/>
+                    <ComboBox Name="SupervisorSupportComboBox" ItemsSource="{Binding WorkerNames}"/>
+                </StackPanel>
+            </Grid>
+
+            <Button Grid.Row="3" Content="Применить изменения" Background="{StaticResource LightGreenBrush}" 
+                    HorizontalAlignment="Center" FontSize="30" Click="ApplyChanges"/>
+        </Grid>
+        
         <Grid Grid.Column="1" Background="White" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
             
         </Grid>
     </Grid>

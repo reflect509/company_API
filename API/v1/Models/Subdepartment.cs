@@ -14,7 +14,7 @@ public partial class Subdepartment
 
     public int? ParentId { get; set; }
 
-    public virtual ICollection<Subdepartment> Children { get; set; } = new List<Subdepartment>();
+    public virtual ICollection<Subdepartment> InverseParent { get; set; } = new List<Subdepartment>();
 
     [JsonIgnore]
     public virtual Subdepartment? Parent { get; set; }

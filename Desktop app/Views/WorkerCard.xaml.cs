@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Desktop_app.Models;
+using Desktop_app.Services;
+using Desktop_app.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +23,24 @@ namespace Desktop_app.Views
     /// </summary>
     public partial class WorkerCard : Window
     {
-        public WorkerCard()
+        public WorkerCard(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
         {
             InitializeComponent();
+            DataContext = new WorkerCardViewModel(apiService, selectedWorker, workers);
+            if (SupervisorComboBox.SelectedItem == null)
+            {
+                SupervisorComboBox.SelectedItem = "Выберите руководителя работника";
+            }
+
+            if (SupervisorSupportComboBox.SelectedItem == null)
+            {
+                SupervisorSupportComboBox.SelectedItem = "Выберите помощника работника";
+            }
+        }
+
+        private void ApplyChanges(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

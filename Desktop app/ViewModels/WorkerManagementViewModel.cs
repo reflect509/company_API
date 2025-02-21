@@ -123,9 +123,9 @@ namespace Desktop_app.ViewModels
 
                 
 
-                if (node.Children != null && node.Children.Count != 0)
+                if (node.InverseParent != null && node.InverseParent.Count != 0)
                 {
-                    LayoutNodes(new List<Node>(node.Children), level: level + 1, offsetX: node.X);
+                    LayoutNodes(new List<Node>(node.InverseParent), level: level + 1, offsetX: node.X);
                     index = 1;
                     offsetX = Nodes.Max(n => n.X);
                 }
@@ -144,9 +144,9 @@ namespace Desktop_app.ViewModels
 
         private void DrawConnectionsForNode(Node parent)
         {
-            if (parent.Children != null)
+            if (parent.InverseParent != null)
             {
-                foreach (var child in parent.Children)
+                foreach (var child in parent.InverseParent)
                 {                   
                     double parentCenterX = parent.X + 200; // Assuming node width of 400
                     double parentBottomY = parent.Y + 50;   // Assuming node height of 50
@@ -177,9 +177,9 @@ namespace Desktop_app.ViewModels
                 workers.AddRange(node.Workers);
             }
 
-            if (node.Children != null)
+            if (node.InverseParent != null)
             {
-                foreach(var child in node.Children)
+                foreach(var child in node.InverseParent)
                 {
                     workers.AddRange(GetWorkers(child));
                 }
@@ -209,8 +209,8 @@ namespace Desktop_app.ViewModels
                 return;
             }
 
-            var workerCardWindow = new WorkerCard();
-            workerCardWindow.DataContext = new WorkerCardViewModel(apiService, worker);
+            var workerCardWindow = new WorkerCard(apiService, worker, Workers);
+            workerCardWindow.Owner = App.Current.MainWindow;
             workerCardWindow.ShowDialog();
         }
 

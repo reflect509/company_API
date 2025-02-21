@@ -12,7 +12,7 @@ public partial class Worker
 
     public DateOnly? Birthdate { get; set; }
 
-    public string? Phone { get; set; }
+    public string? WorkPhone { get; set; }
 
     public string Office { get; set; } = null!;
 
@@ -23,6 +23,12 @@ public partial class Worker
     public string JobPosition { get; set; } = null!;
 
     public string SubdepartmentName { get; set; } = null!;
+
+    public string? Supervisor { get; set; }
+
+    public string? SupervisorSupport { get; set; }
+
+    public string? Phone { get; set; }
 
     public virtual ICollection<DocumentComment> DocumentComments { get; set; } = new List<DocumentComment>();
 

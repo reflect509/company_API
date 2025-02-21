@@ -153,7 +153,7 @@ public partial class ApiDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("subdepartment_name");
 
-            entity.HasOne(d => d.Parent).WithMany(p => p.Children)
+            entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
                 .HasForeignKey(d => d.ParentId)
                 .HasConstraintName("subdepartments_parent_id_fkey");
         });
@@ -166,7 +166,7 @@ public partial class ApiDbContext : DbContext
 
             entity.HasIndex(e => e.FullName, "idx_workers_full_name");
 
-            entity.HasIndex(e => e.Phone, "workers_phone_key").IsUnique();
+            entity.HasIndex(e => e.WorkPhone, "workers_phone_key").IsUnique();
 
             entity.Property(e => e.WorkerId).HasColumnName("worker_id");
             entity.Property(e => e.Birthdate).HasColumnName("birthdate");
@@ -191,6 +191,15 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.SubdepartmentName)
                 .HasMaxLength(255)
                 .HasColumnName("subdepartment_name");
+            entity.Property(e => e.Supervisor)
+                .HasMaxLength(255)
+                .HasColumnName("supervisor");
+            entity.Property(e => e.SupervisorSupport)
+                .HasMaxLength(255)
+                .HasColumnName("supervisor_support");
+            entity.Property(e => e.WorkPhone)
+                .HasMaxLength(20)
+                .HasColumnName("work_phone");
 
             entity.HasOne(d => d.SubdepartmentNameNavigation).WithMany(p => p.Workers)
                 .HasPrincipalKey(p => p.SubdepartmentName)
