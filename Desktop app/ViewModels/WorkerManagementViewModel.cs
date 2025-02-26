@@ -1,18 +1,11 @@
-﻿using Desktop_app.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Desktop_app.Models;
 using Desktop_app.Services;
 using Desktop_app.Views;
-using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace Desktop_app.ViewModels
 {
@@ -210,7 +203,6 @@ namespace Desktop_app.ViewModels
             }
 
             var workerCardWindow = new WorkerCard(apiService, worker, Workers);
-            workerCardWindow.Owner = App.Current.MainWindow;
             workerCardWindow.ShowDialog();
         }
 

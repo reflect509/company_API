@@ -23,12 +23,15 @@ CREATE TABLE IF NOT EXISTS public.workers
     worker_id serial PRIMARY KEY,
     full_name character varying(255) NOT NULL,
     birthdate date,
-    phone character varying(20) UNIQUE,
+    work_phone character varying(20) UNIQUE,
     office character varying(10) NOT NULL,
     email character varying(255) NOT NULL,
     is_subdepartment_head boolean DEFAULT false,
     job_position character varying(255) NOT NULL,
-    subdepartment_name character varying(255) NOT NULL 
+    subdepartment_name character varying(255) NOT NULL,
+	phone varchar(20),
+	supervisor varchar(255),
+	supervisor_support varchar(255)
 	REFERENCES subdepartments(subdepartment_name)
 );
 
