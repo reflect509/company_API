@@ -12,6 +12,7 @@ namespace MobileApp.Models
         public string Title { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
+        public DateTime Date { get; set; }         
         public int PositiveReactions { get; set; }
         public int NegativeReactions { get; set; }
     }

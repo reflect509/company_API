@@ -1,43 +1,101 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:viewmodels="clr-namespace:MobileApp.ViewModels"
-             xmlns:models="clr-namespace:MobileApp.Models"
-             x:Class="MobileApp.Views.NewsPage"
-             x:DataType="viewmodels:NewsViewModel"
-             Title="Новости">
-    
-    <ContentPage.BindingContext>
-        <viewmodels:NewsViewModel />
-    </ContentPage.BindingContext>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+           xmlns:viewmodels="clr-namespace:MobileApp.ViewModels"  
+           xmlns:models="clr-namespace:MobileApp.Models"  
+           xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"  
+           x:Class="MobileApp.Views.NewsPage"  
+           x:DataType="viewmodels:NewsViewModel"  
+           Title="Новости">  
 
-    <ScrollView>
-        <VerticalStackLayout Padding="10">
-            <toolkit:CarouselView ItemsSource="{Binding News}">
-                <toolkit:CarouselView.ItemTemplate>
-                    <DataTemplate x:DataType="models:NewsItem">
-                        <Frame Padding="0" HasShadow="True" Margin="5">
-                            <Grid>
-                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill">
-                                    <Image.Triggers>
-                                        <DataTrigger TargetType="Image" Binding="{Binding ImageUrl}" Value="">
-                                            <Setter Property="Source" Value="placeholder.jpg"/>
-                                        </DataTrigger>
-                                    </Image.Triggers>
-                                </Image>
-                                <StackLayout Padding="10" BackgroundColor="#80000000">
-                                    <Label Text="{Binding Title}" TextColor="White" FontSize="Large"/>
-                                    <Label Text="{Binding Description}" TextColor="White" FontSize="Small"/>
-                                </StackLayout>
-                                <Grid.GestureRecognizers>
-                                    <LongPressGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NewsViewModel}}, Path=ShowReactionsCommand}" CommandParameter="{Binding .}" />
-                                </Grid.GestureRecognizers>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </toolkit:CarouselView.ItemTemplate>
-            </toolkit:CarouselView>
-        </VerticalStackLayout>
-    </ScrollView>
+  <ContentPage.BindingContext>  
+      <viewmodels:NewsViewModel />  
+  </ContentPage.BindingContext>  
+
+  <Grid Padding="10">  
+      <!-- Стрелки навигации -->  
+      <Button Text="←"  
+              FontSize="Large"  
+              BackgroundColor="Transparent"  
+              VerticalOptions="Center"  
+              HorizontalOptions="Start"  
+              Command="{Binding CarouselPrevCommand}" />  
+      <Button Text="→"  
+              FontSize="Large"  
+              BackgroundColor="Transparent"  
+              VerticalOptions="Center"  
+              HorizontalOptions="End"  
+              Command="{Binding CarouselNextCommand}" />  
+
+      <!-- Сам слайдер -->  
+      <CarouselView x:Name="carousel"  
+                    ItemsSource="{Binding News}"  
+                    HorizontalOptions="Fill"  
+                    VerticalOptions="Fill"  
+                    PeekAreaInsets="50"  
+                    IndicatorView="indicator">  
+          <CarouselView.ItemTemplate>  
+              <DataTemplate x:DataType="models:NewsItem">  
+                  <Frame CornerRadius="20" BackgroundColor="#D4FFC4" Padding="0">  
+                      <Grid>  
+                          <!-- Круглое изображение сверху -->  
+                          <Image Source="{Binding ImageUrl}"  
+                                 HeightRequest="100" WidthRequest="100"  
+                                 VerticalOptions="Start" HorizontalOptions="Center"  
+                                 Aspect="AspectFill">  
+                              <Image.Clip>  
+                                  <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>  
+                              </Image.Clip>  
+                              <Image.Triggers>  
+                                  <DataTrigger TargetType="Image" Binding="{Binding ImageUrl}" Value="">  
+                                      <Setter Property="Source" Value="placeholder.jpg"/>  
+                                  </DataTrigger>  
+                              </Image.Triggers>  
+                          </Image>  
+
+                          <!-- Содержимое: заголовок и описание -->  
+                          <StackLayout Padding="20" Margin="0,60,0,40" Spacing="5">  
+                              <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />  
+                              <Label Text="{Binding Description}" FontSize="14" LineBreakMode="TailTruncation" />  
+                          </StackLayout>  
+
+                          <!-- Дата новости: правый нижний угол -->  
+                          <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"  
+                                 FontSize="12"  
+                                 TextColor="Gray"  
+                                 HorizontalOptions="End"  
+                                 VerticalOptions="End"  
+                                 Margin="10" />  
+
+                          <!-- Счётчики реакций: левый нижний угол -->  
+                          <StackLayout Orientation="Horizontal"  
+                                       HorizontalOptions="Start"  
+                                       VerticalOptions="End"  
+                                       Margin="10">  
+                              <Label Text="+{Binding PositiveReactions}" FontSize="14" TextColor="Green"/>  
+                              <Label Text=" " />  
+                              <Label Text="-{Binding NegativeReactions}" FontSize="14" TextColor="Red"/>  
+                          </StackLayout>  
+
+                          <!-- Жест «долгое нажатие» -->  
+                          <Grid.Behaviors>  
+                              <behaviors:TouchBehavior  
+                                  LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NewsViewModel}}, Path=ShowReactionsCommand}"  
+                                  LongPressCommandParameter="{Binding .}"  
+                                  LongPressDuration="700"/>  
+                          </Grid.Behaviors>  
+                      </Grid>  
+                  </Frame>  
+              </DataTemplate>  
+          </CarouselView.ItemTemplate>  
+      </CarouselView>  
+
+      <!-- Индикатор страниц -->  
+      <IndicatorView x:Name="indicator"  
+                     IndicatorColor="LightGray"  
+                     SelectedIndicatorColor="Black"  
+                     HorizontalOptions="Center"  
+                     VerticalOptions="End"  
+                     Margin="0,0,0,10"/>  
+  </Grid>  
 </ContentPage>
