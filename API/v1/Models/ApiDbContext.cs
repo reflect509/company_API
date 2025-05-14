@@ -17,11 +17,15 @@ public partial class ApiDbContext : DbContext
 
     public virtual DbSet<AppUser> AppUsers { get; set; }
 
+    public virtual DbSet<CompanyEvent> CompanyEvents { get; set; }
+
     public virtual DbSet<Document> Documents { get; set; }
 
     public virtual DbSet<DocumentComment> DocumentComments { get; set; }
 
     public virtual DbSet<Event> Events { get; set; }
+
+    public virtual DbSet<News> News { get; set; }
 
     public virtual DbSet<Subdepartment> Subdepartments { get; set; }
 
@@ -40,9 +44,30 @@ public partial class ApiDbContext : DbContext
 
             entity.ToTable("app_users");
 
+            entity.HasIndex(e => e.UserName, "idx_users_id");
+
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.UserName).HasColumnName("user_name");
             entity.Property(e => e.UserPassword).HasColumnName("user_password");
+        });
+
+        modelBuilder.Entity<CompanyEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("company_events_pkey");
+
+            entity.ToTable("company_events");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Author)
+                .HasMaxLength(255)
+                .HasColumnName("author");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
         });
 
         modelBuilder.Entity<Document>(entity =>
@@ -136,6 +161,27 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(255)
                 .HasColumnName("status");
+        });
+
+        modelBuilder.Entity<News>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("news_pkey");
+
+            entity.ToTable("news");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(255)
+                .HasColumnName("image_url");
+            entity.Property(e => e.NegativeReactions).HasColumnName("negative_reactions");
+            entity.Property(e => e.PositiveReactions).HasColumnName("positive_reactions");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
         });
 
         modelBuilder.Entity<Subdepartment>(entity =>
