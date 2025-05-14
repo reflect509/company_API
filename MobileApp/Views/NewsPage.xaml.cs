@@ -1,4 +1,4 @@
-namespace MobilApp.Views;
+namespace MobileApp.Views;
 
 public partial class NewsPage : ContentPage
 {

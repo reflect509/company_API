@@ -1,4 +1,4 @@
-﻿namespace MobilApp
+﻿namespace MobileApp
 {
     public partial class App : Application
     {

@@ -1,11 +1,11 @@
-﻿using MobilApp.Models;
+﻿using MobileApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobilApp.Services
+namespace MobileApp.Services
 {
     public interface IApiService
     {

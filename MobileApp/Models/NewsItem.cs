@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobilApp.Models
+namespace MobileApp.Models
 {
     public class NewsItem
     {

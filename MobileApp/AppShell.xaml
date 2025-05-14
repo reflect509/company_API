@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="MobilApp.AppShell"
+    x:Class="MobileApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MobilApp"
+    xmlns:local="clr-namespace:MobileApp"
     Shell.FlyoutBehavior="Flyout"
-    Title="MobilApp">
+    Title="MobileApp">
 
     <TabBar>
         <ShellContent Title="Новости" ContentTemplate="{DataTemplate views:NewsPage}" />

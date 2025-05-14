@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MobilApp;
+namespace MobileApp.Platforms.iOS;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
