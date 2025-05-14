@@ -37,7 +37,7 @@
                       Margin="30 30 10 30"  Background="LightGray"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
-            <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top">
+            <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top" MouseWheel="SubdepartmentCanvas_MouseWheel">
                 
                 <ItemsControl x:Name="NodeListBox" ItemsSource="{Binding Nodes}"
                          VirtualizingStackPanel.IsVirtualizing="False" >

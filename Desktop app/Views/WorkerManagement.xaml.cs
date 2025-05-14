@@ -20,6 +20,7 @@ namespace Desktop_app
     /// </summary>
     public partial class WorkerManagement : Window
     {
+        private double canvasScale = 1;
         public WorkerManagement()
         {
             InitializeComponent();
@@ -50,6 +51,17 @@ namespace Desktop_app
         private void Subdepartment_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = (WorkerManagementViewModel)this.DataContext;
+        }
+
+        private void SubdepartmentCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            canvasScale += e.Delta > 0 ? 0.05 : -0.05;
+            canvasScale = Math.Max(0.1, Math.Min(canvasScale, 10));
+
+            Point mousePos = e.GetPosition(SubdepartmentCanvas);
+
+            ScaleTransform scaleTransform = new ScaleTransform(canvasScale, canvasScale);
+            SubdepartmentCanvas.RenderTransform = scaleTransform;
         }
     }
 }
