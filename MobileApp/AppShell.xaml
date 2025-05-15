@@ -5,12 +5,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MobileApp"
     xmlns:views="clr-namespace:MobileApp.Views"
-    Shell.FlyoutBehavior="Disabled"
-    Title="MobileApp">
-    
-    <TabBar>
-        <ShellContent Title="Новости" ContentTemplate="{DataTemplate views:NewsPage}" />
-        <ShellContent Title="События" ContentTemplate="{DataTemplate views:EventsPage}" />
-    </TabBar>
+    Shell.FlyoutBehavior="Disabled">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,*" HeightRequest="50" BackgroundColor="#EFEFEF">
+            <Button Text="Новости"
+              BackgroundColor="Yellow"
+              TextColor="Black"
+              Command="{Binding NavigateCommand}"
+              CommandParameter="news"/>
+            <Button Text="События"
+              Grid.Column="1"
+              BackgroundColor="Red"
+              TextColor="Black"
+              Command="{Binding NavigateCommand}"
+              CommandParameter="events"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <ShellContent Route="news" ContentTemplate="{DataTemplate views:NewsPage}" />
+    <ShellContent Route="events" ContentTemplate="{DataTemplate views:EventsPage}" />
 
 </Shell>

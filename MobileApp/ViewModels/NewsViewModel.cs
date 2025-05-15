@@ -24,29 +24,10 @@ namespace MobileApp.ViewModels
             LoadNewsCommand = new AsyncRelayCommand(LoadNews);
             ShowReactionsCommand = new AsyncRelayCommand<NewsItem>(ShowReactions);
             LoadNewsCommand.Execute(null);
-            CarouselPrevCommand = new RelayCommand(() =>
-            {
-                var carousel = Shell.Current.FindByName<CarouselView>("carousel");
-                if (carousel != null && carousel.Position > 0)
-                {
-                    carousel.Position -= 1; // Move to the previous item
-                }
-            });
-
-            CarouselNextCommand = new RelayCommand(() =>
-            {
-                var carousel = Shell.Current.FindByName<CarouselView>("carousel");
-                if (carousel != null && carousel.Position < (carousel.ItemsSource?.Cast<object>().Count() ?? 0) - 1)
-                {
-                    carousel.Position += 1; // Move to the next item
-                }
-            });
         }
 
         public IAsyncRelayCommand LoadNewsCommand { get; }
         public IAsyncRelayCommand<NewsItem> ShowReactionsCommand { get; }
-        public IRelayCommand CarouselPrevCommand { get; }
-        public IRelayCommand CarouselNextCommand { get; }
 
         private async Task LoadNews()
         {

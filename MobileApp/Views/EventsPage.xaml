@@ -1,75 +1,71 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:MobileApp.ViewModels"
-             xmlns:models="clr-namespace:MobileApp.Models"
-             x:Class="MobileApp.Views.EventsPage"
-             x:DataType="viewmodels:EventsViewModel"
-             Title="События">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+           xmlns:viewmodels="clr-namespace:MobileApp.ViewModels"  
+           xmlns:models="clr-namespace:MobileApp.Models"  
+           x:Class="MobileApp.Views.EventsPage"  
+           x:DataType="viewmodels:EventsViewModel">  
 
-    <ContentPage.BindingContext>
-        <viewmodels:EventsViewModel />
-    </ContentPage.BindingContext>
+  <ContentPage.BindingContext>  
+      <viewmodels:EventsViewModel />  
+  </ContentPage.BindingContext>  
 
-    <VerticalStackLayout Padding="10" Spacing="10" Background="LightCyan">
-        <!-- Переключатели вкладок -->
-        <Grid ColumnDefinitions="*,*">
-            <Button Text="Новости"
-                    BackgroundColor="Yellow"
-                    TextColor="Black"/>
-            <Button Text="События"
-                    BackgroundColor="Red"
-                    TextColor="White"
-                    Grid.Column="1"/>
-        </Grid>
+  <VerticalStackLayout Padding="10" Spacing="10" Background="LightCyan">  
 
-        <!-- Список событий -->
-        <CollectionView ItemsSource="{Binding Events}"
-                        ItemsLayout="VerticalList"
-                        SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:EventItem">
-                    <Frame CornerRadius="15"
-                           BackgroundColor="#D4FFC4"
-                           Padding="15"
-                           Margin="0,0,0,5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+      <!-- Список событий -->  
+      <Grid RowDefinitions="*" VerticalOptions="Start">  
+          <CollectionView x:Name="EventsList"  
+              ItemsSource="{Binding Events}"  
+              MaximumHeightRequest="700"
+              ItemsLayout="VerticalList" 
+              SelectionMode="None">  
+              <CollectionView.ItemTemplate>  
+                  <DataTemplate x:DataType="models:EventItem">  
+                      <Frame CornerRadius="15"  
+                             BackgroundColor="#D4FFC4"  
+                             Padding="15"  
+                             Margin="0,0,0,5">  
+                          <Grid>  
+                              <Grid.ColumnDefinitions>  
+                                  <ColumnDefinition Width="Auto"/>  
+                                  <ColumnDefinition Width="*"/>  
+                                  <ColumnDefinition Width="Auto"/>  
+                              </Grid.ColumnDefinitions>  
 
-                            <!-- Дата слева -->
-                            <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                   FontSize="14"
-                                   VerticalOptions="Center"
-                                   Grid.Column="0"/>
+                              <!-- Дата слева -->  
+                              <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"  
+                                     FontSize="14"  
+                                     VerticalOptions="End"  
+                                     Grid.Column="0"/>  
 
-                            <!-- Контент: заголовок и автор -->
-                            <StackLayout Grid.Column="1" Spacing="2" Padding="10,0">
-                                <Label Text="{Binding Title}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"/>
-                                <Label Text="{Binding Description}"
-                                       FontSize="14"
-                                       LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Author}"
-                                       FontSize="12"
-                                       TextColor="Gray"/>
-                            </StackLayout>
+                              <!-- Контент: заголовок и автор -->  
+                              <StackLayout Grid.Column="1" Spacing="2" Padding="10,0">  
+                                  <Label Text="{Binding Title}"  
+                                         FontSize="16"  
+                                         FontAttributes="Bold"/>  
+                                  <Label Text="{Binding Description}"  
+                                           FontSize="14"/>  
 
-                            <!-- Звёздочка для добавления в календарь -->
-                            <ImageButton Source="star.png"
-                                         BackgroundColor="Transparent"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:EventsViewModel}}, Path=AddToCalendarCommand}"
-                                         CommandParameter="{Binding .}"
-                                         Grid.Column="2"
-                                         VerticalOptions="Center"/>
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+
+                              </StackLayout>  
+
+                              <!-- Звёздочка для добавления в календарь -->  
+                              <Label Text="{Binding Author}" Grid.Column="2"   
+                                     VerticalOptions="End"                     
+                                     FontSize="12"  
+                                     TextColor="Gray"/>  
+                              <ImageButton Source="star_gif_32x32.gif"  
+                             BackgroundColor="Transparent"  
+                             Clicked="OnAddToCalendarClicked"  
+                             CommandParameter="{Binding .}"  
+                             Grid.Column="2"  
+                             HorizontalOptions="End"  
+                             VerticalOptions="Start"/>  
+                          </Grid>  
+                      </Frame>  
+                  </DataTemplate>  
+              </CollectionView.ItemTemplate>  
+          </CollectionView>  
+      </Grid>          
+  </VerticalStackLayout>  
 </ContentPage>
