@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MobileApp.Models;
-#if ANDROID
-using MobileApp.Platforms.Android;
-#endif
 using MobileApp.Services;
 using System;
 using System.Collections.Generic;

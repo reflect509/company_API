@@ -1,4 +1,4 @@
-using API.v1.Models;
+п»їusing API.v1.Models;
 using API.v1.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ namespace API
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidateAudience = true,
                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                    ValidateLifetime = true, // Проверка срока действия
+                    ValidateLifetime = true, // ГЏГ°Г®ГўГҐГ°ГЄГ  Г±Г°Г®ГЄГ  Г¤ГҐГ©Г±ГІГўГЁГї
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
@@ -34,6 +34,9 @@ namespace API
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IDocumentService, DocumentService>();
             builder.Services.AddScoped<ISubdepartmentWorkerService, SubdepartmentWorkerService>();
+            builder.Services.AddScoped<INewsService, NewsService>();
+            builder.Services.AddScoped<ICompanyEventService, CompanyEventService>();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<ApiDbContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -44,12 +47,16 @@ namespace API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(5000);
+            });
+
             var app = builder.Build();
                         
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.MapControllers();
 
             app.Run();
