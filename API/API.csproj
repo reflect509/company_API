@@ -22,4 +22,8 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Desktop app\Desktop app.csproj" />
+  </ItemGroup>
+
 </Project>

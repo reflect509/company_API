@@ -47,11 +47,6 @@ namespace API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-            builder.WebHost.ConfigureKestrel(options =>
-            {
-                options.ListenAnyIP(5000);
-            });
-
             var app = builder.Build();
                         
             app.UseAuthentication();

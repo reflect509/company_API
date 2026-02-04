@@ -15,7 +15,7 @@ namespace MobileApp.Services
         {
             _httpClient = new HttpClient()
             {
-                BaseAddress = new Uri("http://192.168.0.19:5000")
+                BaseAddress = new Uri("http://192.168.10.206:5000")
             };
         }
 

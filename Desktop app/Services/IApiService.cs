@@ -9,6 +9,6 @@ namespace Desktop_app.Services
 {
     public interface IApiService
     {
-        Task<IEnumerable<Node>> GetSubdepartmentsAsync();
+        Task<List<Node>> GetSubdepartmentsAsync();
     }
 }

@@ -1,11 +1,7 @@
 ﻿using Desktop_app.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desktop_app.Services
 {
@@ -16,21 +12,13 @@ namespace Desktop_app.Services
         public ApiService(HttpClient httpClient)
         {
             this.httpClient = httpClient;
-            httpClient.BaseAddress = new Uri("https://localhost:10020/api/v1/");
-        }
+            httpClient.BaseAddress = new Uri("http://localhost:5000");
+        }           
 
-        public async Task<IEnumerable<Node>> GetSubdepartmentsAsync()
+        public async Task<List<Node>> GetSubdepartmentsAsync()
         {
-            HttpResponseMessage response = await httpClient.GetAsync("Subdepartment");
-            if (response.IsSuccessStatusCode)
-            {
-                var subdepartments = await response.Content.ReadFromJsonAsync<IEnumerable<Node>>();
-                return subdepartments;
-            }
-            else
-            {
-                throw new Exception(response.ReasonPhrase);
-            }
+            var response = await httpClient.GetStringAsync("/api/v1/Subdepartment");
+            return JsonConvert.DeserializeObject<List<Node>>(response);
         }
     }
 }
