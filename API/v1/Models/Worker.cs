@@ -22,20 +22,24 @@ public partial class Worker
 
     public string JobPosition { get; set; } = null!;
 
-    public string SubdepartmentName { get; set; } = null!;
+    public int SubdepartmentId { get; set; }
+
+    public string? Phone { get; set; }
 
     public string? Supervisor { get; set; }
 
-    public string? SupervisorSupport { get; set; }
+    public string? UserName { get; set; }
 
-    public string? Phone { get; set; }
+    public string? UserPassword { get; set; }
+
+    public virtual ICollection<CompanyEvent> CompanyEvents { get; set; } = new List<CompanyEvent>();
 
     public virtual ICollection<DocumentComment> DocumentComments { get; set; } = new List<DocumentComment>();
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     [JsonIgnore]
-    public virtual Subdepartment SubdepartmentNameNavigation { get; set; } = null!;
+    public virtual Subdepartment Subdepartment { get; set; } = null!;
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
 }

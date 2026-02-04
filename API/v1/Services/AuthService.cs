@@ -1,4 +1,5 @@
 ﻿using API.v1.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,11 +13,13 @@ namespace API.v1.Services
     {
         private readonly IConfiguration configuration;
         private readonly ApiDbContext dbContext;
+        private readonly PasswordHasher<Worker> hasher;
 
         public AuthService(IConfiguration configuration, ApiDbContext dbContext)
         {
             this.configuration = configuration;
             this.dbContext = dbContext;
+            this.hasher = new PasswordHasher<Worker>();
         }
 
         public async Task<string?> Authenticate(string username, string password)
@@ -50,9 +53,15 @@ namespace API.v1.Services
 
         private async Task<bool> CheckUser(string username, string password)
         {
-            return await dbContext.AppUsers
-                .AsNoTracking()
-                .AnyAsync(w => w.UserName == username && w.UserPassword == password);
+            var worker = await dbContext.Workers.FirstOrDefaultAsync(w => w.UserName == username);
+            if (worker == null)
+            {
+                return false;
+            }
+
+            var passCheck = hasher.VerifyHashedPassword(worker, worker.UserPassword, password);
+
+            return passCheck == PasswordVerificationResult.Success;
         }
     }
-}
+}           

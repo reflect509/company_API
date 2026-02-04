@@ -9,17 +9,15 @@ public partial class Document
 
     public string Title { get; set; } = null!;
 
-    public DateTime DateApproval { get; set; }
+    public DateOnly DateApproval { get; set; }
 
-    public DateTime DateEdit { get; set; }
+    public DateOnly DateEdit { get; set; }
 
     public string? Status { get; set; }
 
     public string DocumentType { get; set; } = null!;
 
     public string? Field { get; set; }
-
-    public bool? HasComments { get; set; }
 
     public int? AuthorId { get; set; }
 

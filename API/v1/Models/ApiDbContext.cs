@@ -15,7 +15,7 @@ public partial class ApiDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AppUser> AppUsers { get; set; }
+    public virtual DbSet<CompanyEvent> CompanyEvents { get; set; }
 
     public virtual DbSet<Document> Documents { get; set; }
 
@@ -23,26 +23,38 @@ public partial class ApiDbContext : DbContext
 
     public virtual DbSet<Event> Events { get; set; }
 
+    public virtual DbSet<News> News { get; set; }
+
     public virtual DbSet<Subdepartment> Subdepartments { get; set; }
 
     public virtual DbSet<Worker> Workers { get; set; }
 
     public virtual DbSet<Workingcalendar> Workingcalendars { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         => optionsBuilder.UseNpgsql("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AppUser>(entity =>
+        modelBuilder.Entity<CompanyEvent>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("app_users_pkey");
+            entity.HasKey(e => e.Id).HasName("company_events_pkey");
 
-            entity.ToTable("app_users");
+            entity.ToTable("company_events");
 
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.UserName).HasColumnName("user_name");
-            entity.Property(e => e.UserPassword).HasColumnName("user_password");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AuthorId).HasColumnName("author_id");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
+
+            entity.HasOne(d => d.Author).WithMany(p => p.CompanyEvents)
+                .HasForeignKey(d => d.AuthorId)
+                .HasConstraintName("company_events_author_id_fkey");
         });
 
         modelBuilder.Entity<Document>(entity =>
@@ -51,27 +63,16 @@ public partial class ApiDbContext : DbContext
 
             entity.ToTable("documents");
 
-            entity.HasIndex(e => e.DocumentId, "idx_documents_id");
-
             entity.Property(e => e.DocumentId).HasColumnName("document_id");
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
-            entity.Property(e => e.DateApproval)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("date_approval");
-            entity.Property(e => e.DateEdit)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("date_edit");
+            entity.Property(e => e.DateApproval).HasColumnName("date_approval");
+            entity.Property(e => e.DateEdit).HasColumnName("date_edit");
             entity.Property(e => e.DocumentType)
                 .HasMaxLength(255)
                 .HasColumnName("document_type");
             entity.Property(e => e.Field)
                 .HasMaxLength(255)
                 .HasColumnName("field");
-            entity.Property(e => e.HasComments)
-                .HasDefaultValue(false)
-                .HasColumnName("has_comments");
             entity.Property(e => e.Status)
                 .HasMaxLength(255)
                 .HasColumnName("status");
@@ -90,16 +91,12 @@ public partial class ApiDbContext : DbContext
 
             entity.ToTable("document_comments");
 
-            entity.HasIndex(e => e.CommentId, "idx_document_comments_id");
-
             entity.Property(e => e.CommentId).HasColumnName("comment_id");
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
             entity.Property(e => e.DateCreated)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("date_created");
             entity.Property(e => e.DateUpdated)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("date_updated");
             entity.Property(e => e.DocumentId).HasColumnName("document_id");
@@ -138,6 +135,27 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("status");
         });
 
+        modelBuilder.Entity<News>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("news_pkey");
+
+            entity.ToTable("news");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(255)
+                .HasColumnName("image_url");
+            entity.Property(e => e.NegativeReactions).HasColumnName("negative_reactions");
+            entity.Property(e => e.PositiveReactions).HasColumnName("positive_reactions");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
+        });
+
         modelBuilder.Entity<Subdepartment>(entity =>
         {
             entity.HasKey(e => e.SubdepartmentId).HasName("subdepartments_pkey");
@@ -164,9 +182,7 @@ public partial class ApiDbContext : DbContext
 
             entity.ToTable("workers");
 
-            entity.HasIndex(e => e.FullName, "idx_workers_full_name");
-
-            entity.HasIndex(e => e.WorkPhone, "workers_phone_key").IsUnique();
+            entity.HasIndex(e => e.WorkPhone, "workers_work_phone_key").IsUnique();
 
             entity.Property(e => e.WorkerId).HasColumnName("worker_id");
             entity.Property(e => e.Birthdate).HasColumnName("birthdate");
@@ -188,24 +204,20 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
-            entity.Property(e => e.SubdepartmentName)
-                .HasMaxLength(255)
-                .HasColumnName("subdepartment_name");
+            entity.Property(e => e.SubdepartmentId).HasColumnName("subdepartment_id");
             entity.Property(e => e.Supervisor)
                 .HasMaxLength(255)
                 .HasColumnName("supervisor");
-            entity.Property(e => e.SupervisorSupport)
-                .HasMaxLength(255)
-                .HasColumnName("supervisor_support");
+            entity.Property(e => e.UserName).HasColumnName("user_name");
+            entity.Property(e => e.UserPassword).HasColumnName("user_password");
             entity.Property(e => e.WorkPhone)
                 .HasMaxLength(20)
                 .HasColumnName("work_phone");
 
-            entity.HasOne(d => d.SubdepartmentNameNavigation).WithMany(p => p.Workers)
-                .HasPrincipalKey(p => p.SubdepartmentName)
-                .HasForeignKey(d => d.SubdepartmentName)
+            entity.HasOne(d => d.Subdepartment).WithMany(p => p.Workers)
+                .HasForeignKey(d => d.SubdepartmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("workers_subdepartment_name_fkey");
+                .HasConstraintName("workers_subdepartment_id_fkey");
 
             entity.HasMany(d => d.Events).WithMany(p => p.Workers)
                 .UsingEntity<Dictionary<string, object>>(

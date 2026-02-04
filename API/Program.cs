@@ -30,10 +30,10 @@ namespace API
                     )
                 };
             });
-
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IDocumentService, DocumentService>();
             builder.Services.AddScoped<ISubdepartmentWorkerService, SubdepartmentWorkerService>();
+            builder.Services.AddScoped<IWorkerService, WorkerService>();
             builder.Services.AddDbContext<ApiDbContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));

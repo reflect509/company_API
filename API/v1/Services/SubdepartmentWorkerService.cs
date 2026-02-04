@@ -30,6 +30,7 @@ namespace API.v1.Services
                         SELECT *
                         FROM recursive_subdepartments
                         ORDER BY subdepartment_id";
+
             return await context.Subdepartments
                 .FromSqlRaw(query)
                 .Include(s => s.Workers)
