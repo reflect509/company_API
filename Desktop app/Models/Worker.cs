@@ -15,7 +15,7 @@ namespace Desktop_app.Models
         public required string Email { get; set; }
         public bool? IsSubdepartmentHead { get; set; }
         public required string JobPosition { get; set; }
-        public required string SubdepartmentName { get; set; }
+        public required int SubdepartmentId { get; set; }
         public required string? WorkPhone { get; set; }
         public string? Supervisor { get; set; }
         public string? SupervisorSupport { get; set; }

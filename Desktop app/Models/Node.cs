@@ -9,7 +9,7 @@ namespace Desktop_app.Models
     public class Node
     {
         public int SubdepartmentId { get; set; }
-        public string SubdepartmentName { get; set; }
+        public required string SubdepartmentName { get; set; }
         public int? ParentId { get; set; }
 
         public double X { get; set; }
