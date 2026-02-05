@@ -19,5 +19,7 @@ namespace Desktop_app.Models
         public required string? WorkPhone { get; set; }
         public string? Supervisor { get; set; }
         public string? SupervisorSupport { get; set; }
+        // for UI
+        public string? SubdepartmentName { get; set; }
     }
 }

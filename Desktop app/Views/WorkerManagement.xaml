@@ -8,7 +8,7 @@
         Title="Управление персоналом" Height="700" Width="1000" WindowStartupLocation="CenterScreen" 
         MinHeight="450" MinWidth="800"
         Icon="\Images\Logo.png">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -19,7 +19,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource LightGreenBrush}">
+        <Grid x:Name="TopPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource LightGreenBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5*"/>
@@ -33,60 +33,70 @@
             
         </Grid>
 
-        <ScrollViewer Grid.Column="0" Grid.Row="1"
-                      Margin="30 30 10 30"  Background="LightGray"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Auto">
-            <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top">
-                
-                <ItemsControl x:Name="NodeListBox" ItemsSource="{Binding Nodes}"
-                         VirtualizingStackPanel.IsVirtualizing="False" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Canvas.Left" Value="{Binding X}" />
-                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding SubdepartmentName}" Width="400" Height="50" 
-                                    Background="{StaticResource LightGreenBrush}" FontSize="12"
-                                    Command="{Binding DataContext.NodeClickedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"/>                                                             
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+        <Grid x:Name="SubdepartmentGrid" Grid.Column="0" Grid.Row="1" Margin="30 30 10 30"  Background="LightGray">
+            <ScrollViewer x:Name="SubdepartmentScrollViewer" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"                         
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top" >
 
-                <ItemsControl ItemsSource="{Binding Connections}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}"
-                                  Stroke="Black" StrokeThickness="1"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Canvas>
-        </ScrollViewer>        
+                    <ItemsControl x:Name="NodeListBox" ItemsSource="{Binding Nodes}"
+                             VirtualizingStackPanel.IsVirtualizing="False" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Content="{Binding SubdepartmentName}" Width="400" Height="50" 
+                                        Background="{StaticResource DarkGreenBrush}" FontSize="12" 
+                                        Command="{Binding DataContext.NodeClickedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-        
-        <ListBox ItemsSource="{Binding Workers}" Grid.Column="1" Grid.Row="1"
+                    <ItemsControl ItemsSource="{Binding Connections}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}"
+                                      Stroke="Black" StrokeThickness="1"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Canvas>
+            </ScrollViewer>
+            <Button
+                Content="⛶"
+                Width="40"
+                Height="40"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="20"
+                Click="FullscreenButton_Click"/>
+        </Grid>
+
+
+
+        <ListBox x:Name="WorkerListBox" ItemsSource="{Binding Workers}" Grid.Column="1" Grid.Row="1"  
                  Margin="10 30 30 30" Background="LightGray"
                  HorizontalContentAlignment="Stretch"
                  SelectedItem="{Binding SelectedWorker, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="0.5" >
-                        <Grid Background="{StaticResource LightGreenBrush}">
+                        <Grid Background="{StaticResource DarkGreenBrush}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>

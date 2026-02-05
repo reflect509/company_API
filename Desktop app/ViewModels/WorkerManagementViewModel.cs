@@ -12,6 +12,7 @@ namespace Desktop_app.ViewModels
     public class WorkerManagementViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        public event Action? ExitFullscreenRequested;
         public event EventHandler DataLoaded;
         private readonly IApiService apiService;
         public ICommand NodeClickedCommand { get;}
@@ -167,7 +168,11 @@ namespace Desktop_app.ViewModels
 
             if (node.Workers != null)
             {
-                workers.AddRange(node.Workers);
+                foreach (var worker in node.Workers)
+                {
+                    worker.SubdepartmentName = node.SubdepartmentName;
+                    workers.Add(worker);
+                }
             }
 
             if (node.InverseParent != null)
@@ -193,6 +198,8 @@ namespace Desktop_app.ViewModels
             Workers.Clear();
 
             Workers = new ObservableCollection<Worker>(workers);
+
+            ExitFullscreenRequested?.Invoke();
         }
 
         private void OnWorkerSelected(Worker worker)
