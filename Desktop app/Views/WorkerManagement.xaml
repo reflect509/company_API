@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Desktop_app"
         mc:Ignorable="d"
-        Title="Управление персоналом" Height="700" Width="1000" WindowStartupLocation="CenterScreen" 
+        Title="Управление персоналом" Height="700" Width="1000" WindowStartupLocation="CenterScreen" WindowState="Maximized"
         MinHeight="450" MinWidth="800"
         Icon="\Images\Logo.png">
     <Grid x:Name="MainGrid">
@@ -37,45 +37,58 @@
             <ScrollViewer x:Name="SubdepartmentScrollViewer" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"                         
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto">
-                <Canvas Name="SubdepartmentCanvas" VerticalAlignment="Top" >
-
+                <Canvas Name="SubdepartmentCanvas" 
+                            VerticalAlignment="Top">
                     <ItemsControl x:Name="NodeListBox" ItemsSource="{Binding Nodes}"
-                             VirtualizingStackPanel.IsVirtualizing="False" >
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.Left" Value="{Binding X}" />
-                                <Setter Property="Canvas.Top" Value="{Binding Y}" />
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button Content="{Binding SubdepartmentName}" Width="400" Height="50" 
-                                        Background="{StaticResource DarkGreenBrush}" FontSize="12" 
-                                        Command="{Binding DataContext.NodeClickedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                    VirtualizingStackPanel.IsVirtualizing="False" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                <Button 
+                                    Width="200" 
+                                    MinHeight="100"
+                                    Background="{StaticResource DarkGreenBrush}" 
+                                    FontSize="30" 
+                                    Padding="8"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding DataContext.NodeClickedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}">
+                                    
+                                    <TextBlock
+                                        Text="{Binding SubdepartmentName}"
+                                        TextWrapping="Wrap"
+                                        TextAlignment="Center"
+                                        Foreground="White"/>
+                                </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                    <ItemsControl ItemsSource="{Binding Connections}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}"
-                                      Stroke="Black" StrokeThickness="1"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Canvas>
+                        <ItemsControl ItemsSource="{Binding Connections}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}"
+                                          Stroke="Black" StrokeThickness="1"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Canvas>
             </ScrollViewer>
             <Button
                 Content="⛶"

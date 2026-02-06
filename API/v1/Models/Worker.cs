@@ -38,6 +38,7 @@ public partial class Worker
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    [JsonIgnore]
     public virtual Subdepartment Subdepartment { get; set; } = null!;
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();

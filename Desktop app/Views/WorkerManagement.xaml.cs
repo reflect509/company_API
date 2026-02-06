@@ -1,6 +1,7 @@
 ﻿using Desktop_app.Models;
 using Desktop_app.Services;
 using Desktop_app.ViewModels;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Desktop_app
 {
@@ -21,13 +23,14 @@ namespace Desktop_app
     /// </summary>
     public partial class WorkerManagement : Window
     {
-        private double _scaleValue = 1.0;
+        private double _scaleValue = 0.1;
 
         private bool _subdepartmentGridIsFullscreen;
         private int _subdepartmentGridOriginalRow;
         private int _subdepartmentGridOriginalColumn;
         private int _subdepartmentGridOriginalRowSpan;
         private int _subdepartmentGridOriginalColumnSpan;
+        private bool _connectionsBuilt;
         public WorkerManagement()
         {
             InitializeComponent();
@@ -37,6 +40,12 @@ namespace Desktop_app
             
             viewModel.DataLoaded += ViewModel_DataLoaded;
             viewModel.ExitFullscreenRequested += OnExitFullscreenRequested;
+            Loaded += (_, _) =>
+            {
+                Dispatcher.BeginInvoke(
+                    DispatcherPriority.Loaded,
+                    RebuildConnections);
+            };
         }
                 
         private void OnExitFullscreenRequested()
@@ -152,6 +161,61 @@ namespace Desktop_app
         private void FullscreenButton_Click(object sender, RoutedEventArgs e)
         {
             ToggleFullscreen();
-        }   
+        }
+
+        private Button? GetButtonForNode(Node node)
+        {
+            var presenter = NodeListBox.ItemContainerGenerator
+                .ContainerFromItem(node) as ContentPresenter;
+
+            if (presenter == null)
+                return null;
+
+            presenter.ApplyTemplate();
+
+            return VisualTreeHelper.GetChild(presenter, 0) as Button;
+        }
+
+        private void RebuildConnections()
+        {
+            var vm = (WorkerManagementViewModel)this.DataContext;
+            vm.Connections.Clear();
+                
+            foreach (var parent in vm.Nodes)
+            {
+                if (parent.InverseParent == null || parent.InverseParent.Count == 0)
+                    continue;
+
+                var parentButton = GetButtonForNode(parent);
+                if (parentButton == null)
+                    continue;
+
+                // координаты кнопки родителя в Canvas
+                Point parentTopLeft =
+                    parentButton.TransformToAncestor(SubdepartmentCanvas)
+                                .Transform(new Point(0, 0));
+
+                double parentCenterX = parent.X + parentButton.ActualWidth / 2;
+                double parentBottomY = parent.Y + parentButton.ActualHeight;
+
+                foreach (var child in parent.InverseParent)
+                {
+                    var childButton = GetButtonForNode(child);
+                    if (childButton == null)
+                        continue;
+
+                    double childCenterX = child.X + childButton.ActualWidth / 2;
+                    double childTopY = child.Y;
+
+                    vm.Connections.Add(new Connection
+                    {
+                        X1 = parentCenterX,
+                        Y1 = parentBottomY,
+                        X2 = childCenterX,
+                        Y2 = childTopY
+                    });
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Desktop_app.Models
         public double X { get; set; }
         public double Y { get; set; }
         public int Level { get; set; }
+        public double SubtreeWidth { get; set; }
 
         public List<Node> InverseParent { get; set; } = new List<Node>();
         public List<Worker> Workers { get; set; } = new List<Worker>();

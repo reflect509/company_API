@@ -16,8 +16,12 @@ namespace Desktop_app.ViewModels
         public event EventHandler DataLoaded;
         private readonly IApiService apiService;
         public ICommand NodeClickedCommand { get;}
+        private const double NodeWidth = 200;
+        private const double NodeMinHeight = 100;
+        private const double HorizontalSpacing = 40;
+        private const double VerticalSpacing = 400;
 
-        private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
+         private ObservableCollection<Node> nodes = new ObservableCollection<Node>();
 
         public ObservableCollection<Node> Nodes
         {
@@ -93,38 +97,67 @@ namespace Desktop_app.ViewModels
             DataLoaded?.Invoke(this, EventArgs.Empty);
         }
 
-        private void CalculatePositions(IEnumerable<Node> nodes)
-        {            
-            LayoutNodes(nodes.ToList(), level: 0, offsetX: 10);
+        private double CalculateSubtreeWidth(Node node)
+        {
+            double nodeWidth = NodeWidth;
+            double horizontalSpacing = HorizontalSpacing;
+
+            if (node.InverseParent == null || node.InverseParent.Count == 0)
+            {
+                node.SubtreeWidth = nodeWidth;
+                return node.SubtreeWidth;
+            }
+
+            double childrenWidth = 0;
+
+            foreach (var child in node.InverseParent)
+            {
+                childrenWidth += CalculateSubtreeWidth(child);
+            }
+
+            childrenWidth += horizontalSpacing * (node.InverseParent.Count - 1);
+
+            node.SubtreeWidth = Math.Max(nodeWidth, childrenWidth);
+            return node.SubtreeWidth;
         }
 
-        private void LayoutNodes(List<Node> nodes, int level, double offsetX)
+        public void CalculatePositions(IEnumerable<Node> roots)
         {
-            double horizontalSpacing = 425;
-            double verticalSpacing = 150;
-            int index = 0;
+            Nodes.Clear();
 
-            foreach (var node in nodes)
+            double startX = 10;
+
+            foreach (var root in roots)
             {
-                if (Nodes.Any(n => n.SubdepartmentName == node.SubdepartmentName))
-                {
-                    continue;
-                }
-                node.Level = level;
-                node.Y = level * verticalSpacing + 10;
-                node.X = offsetX + index * horizontalSpacing;               
-                index++;
+                CalculateSubtreeWidth(root);
+                LayoutNode(root, startX, 0);
+                startX += root.SubtreeWidth + 50;
+            }
+        }
 
-                
+        private void LayoutNode(Node node, double startX, int level)
+        {
+            double nodeWidth = NodeWidth;       
+            double verticalSpacing = VerticalSpacing;
+            double horizontalSpacing = HorizontalSpacing;
 
-                if (node.InverseParent != null && node.InverseParent.Count != 0)
-                {
-                    LayoutNodes(new List<Node>(node.InverseParent), level: level + 1, offsetX: node.X);
-                    index = 1;
-                    offsetX = Nodes.Max(n => n.X);
-                }
+            node.Level = level;
+            node.Y = level * verticalSpacing + 10;
 
-                Nodes.Add(node);
+            // центрируем родителя
+            node.X = startX + (node.SubtreeWidth - nodeWidth) / 2;
+
+            Nodes.Add(node);
+
+            if (node.InverseParent == null || node.InverseParent.Count == 0)
+                return;
+
+            double childX = startX;
+
+            foreach (var child in node.InverseParent)
+            {
+                LayoutNode(child, childX, level + 1);
+                childX += child.SubtreeWidth + horizontalSpacing;
             }
         }
 
@@ -142,9 +175,9 @@ namespace Desktop_app.ViewModels
             {
                 foreach (var child in parent.InverseParent)
                 {                   
-                    double parentCenterX = parent.X + 200; // Assuming node width of 400
-                    double parentBottomY = parent.Y + 50;   // Assuming node height of 50
-                    double childCenterX = child.X + 200;
+                    double parentCenterX = parent.X + NodeWidth / 2;
+                    double parentBottomY = parent.Y + NodeMinHeight;   // Assuming node height of 50
+                    double childCenterX = child.X + NodeWidth / 2;
                     double childTopY = child.Y;            
 
                     var connection = new Connection
