@@ -6,5 +6,6 @@ namespace API.v1.Services
     {
         Task<Worker?> GetWorkerByIdAsync(int workerId);
         Task<(string username, string password)> GenerateCredentialsAsync(int workerId);
+        Task<(bool Success, string Error)> UpdateWorkerAsync(Worker worker);
     }
 }

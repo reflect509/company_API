@@ -10,5 +10,6 @@ namespace Desktop_app.Services
     public interface IApiService
     {
         Task<IEnumerable<Node>> GetSubdepartmentsAsync();
+        Task<bool> UpdateWorker(Worker worker);
     }
 }

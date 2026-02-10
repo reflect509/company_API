@@ -5,85 +5,183 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Desktop_app.Views"
         mc:Ignorable="d"
-        Title="Карточка сотрудника" Height="600" Width="800"
+        Title="Карточка сотрудника"
         WindowStartupLocation="CenterScreen"
         Icon="\Images\Logo.png">
-    <Grid Background="LightGray">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        
+    <Grid>
+        <!-- Фоновый градиент -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FFF4F4F4" Offset="0"/>
+                <GradientStop Color="#FFEFEFEF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Grid Grid.Column="0" Background="White" Margin="10" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- Основная карточка -->
+        <Border BorderBrush="#FFEF6C00" BorderThickness="2" CornerRadius="10" Margin="20" Background="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto">                            
-                <ItemsControl ItemsSource="{Binding SelectedWorker}" VerticalAlignment="Top">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel VerticalAlignment="Stretch">
-                                <TextBlock Text="ФИО работника:" FontSize="20"/>
-                                <TextBox Text="{Binding FullName}" FontSize="20" Margin="0 0 0 10"/>
+                <!-- Scrollable Content -->
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="10">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
 
-                                <TextBlock Text="Телефон работника:" FontSize="20"/>
-                                <TextBox Text="{Binding Phone}" FontSize="20" Margin="0 0 0 10"/>
+                        <!-- Раздел: Основная информация -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Основная информация" FontSize="18" FontWeight="Bold" Foreground="#FF333333" Margin="0,0,0,10"/>
 
-                                <TextBlock Text="Дата рождения работника:" FontSize="20"/>
-                                <TextBox Text="{Binding Birthdate}" FontSize="20" Margin="0 0 0 10"/>
+                                <TextBlock Text="ФИО работника:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.FullName, Mode=TwoWay,
+                                         ValidatesOnNotifyDataErrors=True,
+                                         UpdateSourceTrigger=PropertyChanged}" 
+                                         FontSize="16" MinWidth="600"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                    <TextBox.ToolTip>
+                                        <ItemsControl
+                                            ItemsSource="{Binding
+                                                RelativeSource={RelativeSource Self},
+                                                Path=(Validation.Errors)}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>    
+                                        </ItemsControl>
+                                    </TextBox.ToolTip>
+                                </TextBox>
 
-                                <TextBlock Text="Подразделение:" FontSize="20"/>
-                                <TextBox Text="{Binding SubdepartmentName}" FontSize="20" Margin="0 0 0 10"/>
+                                <TextBlock Text="Дата рождения:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Birthdate}" IsReadOnly="True" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
 
-                                <TextBlock Text="Должность:" FontSize="20"/>
-                                <TextBox Text="{Binding JobPosition}" FontSize="20" Margin="0 0 0 10"/>
+                                <TextBlock Text="Подразделение:" FontSize="16" Foreground="#FF555555"/>
+                                <ComboBox ItemsSource="{Binding Subdepartments}"
+                                          DisplayMemberPath="SubdepartmentName"
+                                          SelectedValuePath="SubdepartmentId"
+                                          SelectedValue="{Binding SelectedWorker.SubdepartmentId, Mode=TwoWay}"
+                                          FontSize="16"/> 
 
-                                <TextBlock Text="Рабочий телефон:" FontSize="20"/>
-                                <TextBox Text="{Binding WorkPhone}" FontSize="20" Margin="0 0 0 10"/>
-
-                                <TextBlock Text="Почта работника:" FontSize="20"/>
-                                <TextBox Text="{Binding Email}" FontSize="20" Margin="0 0 0 10" />
-
-                                <TextBlock Text="ФИО работника:" FontSize="20"/>
-                                <TextBox Text="{Binding Office}" FontSize="20" />
+                                <TextBlock Text="Должность:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.JobPosition, Mode=TwoWay}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
                             </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-            
-            <Grid Grid.Row="1" Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+                        </Border>
 
-                <StackPanel Grid.Column="0" VerticalAlignment="Top">
-                    <TextBlock Text="Руководитель"/>
-                    <ComboBox Name="SupervisorComboBox" ItemsSource="{Binding WorkerNames}"/>                    
-                </StackPanel>
+                        <!-- Раздел: Контактная информация -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Контактная информация" FontSize="18" FontWeight="Bold" Foreground="#FF333333" Margin="0,0,0,10"/>
 
-                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="20 0 0 0">
-                    <TextBlock Text="Помощник"/>
-                    <ComboBox Name="SupervisorSupportComboBox" ItemsSource="{Binding WorkerNames}"/>
-                </StackPanel>
+                                <TextBlock Text="Телефон работника:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Phone, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged}"
+                                                PreviewTextInput="Phone_PreviewTextInput"
+                                                TextChanged="Phone_TextChanged"
+                                                MaxLength="18" FontSize="16"
+                                                Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Рабочий телефон:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.WorkPhone, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Почта:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Email, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Офис:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Office, Mode=TwoWay}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Раздел: Руководитель и помощник -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Руководитель:" FontSize="16" Foreground="#FF555555"/>
+                                    <ComboBox ItemsSource="{Binding Workers}" 
+                                              DisplayMemberPath="FullName"
+                                              SelectedValuePath="FullName"
+                                              SelectedValue="{Binding SelectedWorker.Supervisor, Mode=TwoWay}" 
+                                              FontSize="16"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Кнопки: Сохранить изменения + Создать событие -->
+                <Grid Grid.Row="1" Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Сохранить изменения -->
+                    <Button Grid.Column="0" Content="Сохранить изменения"
+                        Command="{Binding SaveWorkerCommand}"
+                        CommandParameter="{Binding SelectedWorker}"
+                        FontSize="18" FontWeight="SemiBold"
+                        Height="50" 
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="10 0 0 0">
+                    </Button>
+
+                    <!-- Создать событие -->
+                    <Button Grid.Column="2" Content="Создать событие"
+                        Command="{Binding CreateEventCommand}"
+                        FontSize="16" FontWeight="SemiBold"
+                        Height="50"
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="0 0 10 0">
+                    </Button>
+                </Grid>
+
             </Grid>
-
-            <Button Grid.Row="3" Content="Применить изменения" Background="{StaticResource LightGreenBrush}" 
-                    HorizontalAlignment="Center" FontSize="30" Click="ApplyChanges"/>
-        </Grid>
-        
-        <Grid Grid.Column="1" Background="White" Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            
-        </Grid>
+        </Border>
     </Grid>
 </Window>

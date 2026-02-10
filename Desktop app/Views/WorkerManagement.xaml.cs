@@ -23,21 +23,22 @@ namespace Desktop_app
     /// </summary>
     public partial class WorkerManagement : Window
     {
-        private double _scaleValue = 0.1;
+        private WorkerManagementViewModel vm;
+        private double _scaleValue = 1;
 
         private bool _subdepartmentGridIsFullscreen;
         private int _subdepartmentGridOriginalRow;
         private int _subdepartmentGridOriginalColumn;
         private int _subdepartmentGridOriginalRowSpan;
         private int _subdepartmentGridOriginalColumnSpan;
-        private bool _connectionsBuilt;
         public WorkerManagement()
         {
             InitializeComponent();
             var viewModel = new WorkerManagementViewModel(new ApiService(new HttpClient()));
             this.DataContext = viewModel;
+            vm = viewModel;
 
-            
+
             viewModel.DataLoaded += ViewModel_DataLoaded;
             viewModel.ExitFullscreenRequested += OnExitFullscreenRequested;
             Loaded += (_, _) =>
@@ -64,19 +65,13 @@ namespace Desktop_app
 
         private void SetCanvasSize()
         {
-            var viewModel = (WorkerManagementViewModel)this.DataContext;
 
-            double maxX = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.X) + 450 : 800;
-            double maxY = viewModel.Nodes.Any() ? viewModel.Nodes.Max(n => n.Y) + 100 : 600;
+            double maxX = vm.Nodes.Any() ? vm.Nodes.Max(n => n.X) + 450 : 800;
+            double maxY = vm.Nodes.Any() ? vm.Nodes.Max(n => n.Y) + 100 : 600;
 
             SubdepartmentCanvas.Width = maxX;
             SubdepartmentCanvas.Height = maxY;
 
-        }
-
-        private void Subdepartment_Click(object sender, RoutedEventArgs e)
-        {
-            var viewModel = (WorkerManagementViewModel)this.DataContext;
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -178,43 +173,58 @@ namespace Desktop_app
 
         private void RebuildConnections()
         {
-            var vm = (WorkerManagementViewModel)this.DataContext;
             vm.Connections.Clear();
-                
+
             foreach (var parent in vm.Nodes)
             {
-                if (parent.InverseParent == null || parent.InverseParent.Count == 0)
+                RebuildConnectionsForNode(parent);
+            }
+        }
+
+        private void RebuildConnectionsForNode(Node parent)
+        {
+            if (parent.InverseParent == null || parent.InverseParent.Count == 0)
+                return;
+
+            var parentButton = GetButtonForNode(parent);
+            if (parentButton == null)
+                return;
+
+            Point parentTopLeft = parentButton.TransformToAncestor(SubdepartmentCanvas)
+                                               .Transform(new Point(0, 0));
+
+            double parentCenterX = parentTopLeft.X + parentButton.ActualWidth / 2;
+            double parentBottomY = parentTopLeft.Y + parentButton.ActualHeight;
+
+            foreach (var child in parent.InverseParent)
+            {
+                var childButton = GetButtonForNode(child);
+                if (childButton == null)
                     continue;
 
-                var parentButton = GetButtonForNode(parent);
-                if (parentButton == null)
-                    continue;
+                Point childTopLeft = childButton.TransformToAncestor(SubdepartmentCanvas)
+                                                .Transform(new Point(0, 0));
 
-                // координаты кнопки родителя в Canvas
-                Point parentTopLeft =
-                    parentButton.TransformToAncestor(SubdepartmentCanvas)
-                                .Transform(new Point(0, 0));
+                double childCenterX = childTopLeft.X + childButton.ActualWidth / 2;
+                double childTopY = childTopLeft.Y;
 
-                double parentCenterX = parent.X + parentButton.ActualWidth / 2;
-                double parentBottomY = parent.Y + parentButton.ActualHeight;
+                // создаём ломаную стрелку через среднюю Y
+                double midY = (parentBottomY + childTopY) / 2;
 
-                foreach (var child in parent.InverseParent)
+                var geometry = new PathGeometry();
+                var figure = new PathFigure { StartPoint = new Point(parentCenterX, parentBottomY) };
+                figure.Segments.Add(new LineSegment(new Point(parentCenterX, midY), true));
+                figure.Segments.Add(new LineSegment(new Point(childCenterX, midY), true));
+                figure.Segments.Add(new LineSegment(new Point(childCenterX, childTopY), true));
+                geometry.Figures.Add(figure);
+
+                vm.Connections.Add(new Connection
                 {
-                    var childButton = GetButtonForNode(child);
-                    if (childButton == null)
-                        continue;
+                    PathGeometry = geometry
+                });
 
-                    double childCenterX = child.X + childButton.ActualWidth / 2;
-                    double childTopY = child.Y;
-
-                    vm.Connections.Add(new Connection
-                    {
-                        X1 = parentCenterX,
-                        Y1 = parentBottomY,
-                        X2 = childCenterX,
-                        Y2 = childTopY
-                    });
-                }
+                // рекурсивно для детей
+                RebuildConnectionsForNode(child);
             }
         }
     }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.v1.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/")]
     [ApiController]
     public class SubdepartmentController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace API.v1.Controllers
             this.subdepartmentWorkerService = subdepartmentWorkerService;
         }
 
-        [HttpGet]
+        [HttpGet("Subdepartments")]
         public async Task<IActionResult> GetSubdepartments()
         {
             if (!ModelState.IsValid)

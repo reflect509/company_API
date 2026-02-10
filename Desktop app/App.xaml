@@ -8,11 +8,15 @@
         <Color x:Key="LightGreen">#89FC43</Color>
         <Color x:Key="Yellow">#F8FC43</Color>
         <Color x:Key="Red">#FC4343</Color>
+        <Color x:Key="Orange">#FFA07A</Color>
+        <Color x:Key="DarkOrange">#FF8C00</Color>
 
         <SolidColorBrush x:Key="DarkGreenBrush" Color="{StaticResource DarkGreen}"/>
         <SolidColorBrush x:Key="LightGreenBrush" Color="{StaticResource LightGreen}"/>
         <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource Yellow}"/>
         <SolidColorBrush x:Key="RedBrush" Color="{StaticResource Red}"/>
+        <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource Orange}"/>
+        <SolidColorBrush x:Key="DarkOrangeBrush" Color="{StaticResource DarkOrange}"/>
         
         
     </Application.Resources>

@@ -1,4 +1,5 @@
-﻿using API.v1.Services;
+﻿using API.v1.Models;
+using API.v1.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace API.v1.Controllers
             this.workerService = workerService;
         }
 
-        [HttpPost("Worker/{workerId}/generate-credentials")]
+        [HttpPost("Workers/{workerId}/generate-credentials")]
         public async Task<IActionResult> GenerateCredentials(int workerId)
         {
             try
@@ -34,7 +35,7 @@ namespace API.v1.Controllers
             }
         }
 
-        [HttpGet("Worker/{workerId}")]
+        [HttpGet("Workers/{workerId}")]
         public async Task<IActionResult> GetWorker(int workerId)
         {
             var worker = await workerService.GetWorkerByIdAsync(workerId);
@@ -44,6 +45,20 @@ namespace API.v1.Controllers
             }
             return Ok(worker);
         }
+        [HttpPatch("Workers/{workerId}")]
+        public async Task<IActionResult> UpdateWorker(int workerId, [FromBody] Worker worker)
+        {
+            if (worker == null || workerId != worker.WorkerId)
+                return BadRequest("Неверные данные работника.");
 
+            
+            var result = await workerService.UpdateWorkerAsync(worker);
+
+            if (!result.Success)
+                return BadRequest(result.Error);
+
+            return Ok("Данные успешно обновлены.");
+            
+        }
     }
 }

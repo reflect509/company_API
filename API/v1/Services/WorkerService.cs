@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace API.v1.Services
 {
@@ -47,6 +48,69 @@ namespace API.v1.Services
             await context.SaveChangesAsync();
 
             return (username, password); // вернуть оригинальный пароль один раз
+        }
+
+        public async Task<(bool Success, string Error)> UpdateWorkerAsync(Worker worker)
+        {
+            var existingWorker = await context.Workers.FindAsync(worker.WorkerId);
+            if (existingWorker == null)
+                return (false, "Работник не найден");
+
+            if (!IsValidFullName(worker.FullName))
+                return (false, "ФИО должно состоять из трёх слов");
+
+            if (!IsValidPhone(worker.Phone) || !IsValidPhone(worker.WorkPhone))
+                return (false, "Телефон имеет неверный формат");
+
+            if (!IsValidEmail(worker.Email))
+                return (false, "Некорректный email");
+
+            existingWorker.FullName = worker.FullName;
+            existingWorker.Phone = worker.Phone;
+            existingWorker.WorkPhone = worker.WorkPhone;
+            existingWorker.Email = worker.Email;
+            existingWorker.JobPosition = worker.JobPosition;
+            existingWorker.SubdepartmentId = worker.SubdepartmentId;
+            existingWorker.Office = worker.Office;
+            existingWorker.Supervisor = worker.Supervisor;
+
+            await context.SaveChangesAsync();
+
+            return (true, null);
+        }
+
+        private static bool IsValidFullName(string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(fullName))
+                return false;
+
+            var parts = fullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length == 3;
+        }
+
+        private static bool IsValidPhone(string? phone)
+        {
+            if (string.IsNullOrWhiteSpace(phone))
+                return true;
+
+            var regex = new Regex(@"^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$");
+            return regex.IsMatch(phone);
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

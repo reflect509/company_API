@@ -19,7 +19,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="TopPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource LightGreenBrush}">
+        <Grid x:Name="TopPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource OrangeBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5*"/>
@@ -56,8 +56,8 @@
                                 <DataTemplate>
                                 <Button 
                                     Width="200" 
-                                    MinHeight="100"
-                                    Background="{StaticResource DarkGreenBrush}" 
+                                    MinHeight="130"
+                                    Background="{StaticResource DarkOrangeBrush}" 
                                     FontSize="30" 
                                     Padding="8"
                                     HorizontalContentAlignment="Stretch"
@@ -83,8 +83,9 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}"
-                                          Stroke="Black" StrokeThickness="1"/>
+                                    <Path Data="{Binding PathGeometry}"
+                                          Stroke="Black" StrokeThickness="1"
+                                          IsHitTestVisible="False"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -109,7 +110,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="0.5" >
-                        <Grid Background="{StaticResource DarkGreenBrush}">
+                        <Grid Background="{StaticResource DarkOrangeBrush}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
@@ -125,20 +126,20 @@
 
 
                             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="9"
-                                        Text="{Binding SubdepartmentName}" Margin="10 10 0 0 "/>
+                                        Text="{Binding SubdepartmentName}" Margin="10 10 0 0 " Foreground="White"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" FontSize="9"
-                                        Text="{Binding JobPosition, StringFormat=' - {0}'}" Margin="10 10 0 0"/>
+                                        Text="{Binding JobPosition, StringFormat=' - {0}'}" Margin="10 10 0 0" Foreground="White"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="13"
-                                        Text="{Binding FullName}" Margin="10 3 0 0"/>
+                                        Text="{Binding FullName}" Margin="10 3 0 0" Foreground="White"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" FontSize="10"
-                                        Text="{Binding WorkPhone}" Margin="10 3 0 0"/>
+                                        Text="{Binding WorkPhone}" Margin="10 3 0 0" Foreground="White"/>
                             <TextBlock Grid.Row="2" Grid.Column="1" FontSize="10"
-                                        Text="{Binding Email}" Margin="10 3 0 0"/>
+                                        Text="{Binding Email}" Margin="10 3 0 0" Foreground="White"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" FontSize="9"
-                                        Text="{Binding Office}" Margin="10 4 0 10"/>
+                                        Text="{Binding Office}" Margin="10 4 0 10" Foreground="White"/>
 
                         </Grid>
                     </Border>

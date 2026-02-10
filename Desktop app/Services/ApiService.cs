@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Desktop_app.Services
@@ -21,7 +22,7 @@ namespace Desktop_app.Services
 
         public async Task<IEnumerable<Node>> GetSubdepartmentsAsync()
         {
-            HttpResponseMessage response = await httpClient.GetAsync("Subdepartment");
+            HttpResponseMessage response = await httpClient.GetAsync("Subdepartments");
             if (response.IsSuccessStatusCode)
             {
                 var subdepartments = await response.Content.ReadFromJsonAsync<IEnumerable<Node>>();
@@ -30,6 +31,24 @@ namespace Desktop_app.Services
             else
             {
                 throw new Exception(response.ReasonPhrase);
+            }
+        }
+        public async Task<bool> UpdateWorker(Worker worker)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(worker);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PatchAsync($"Workers/{worker.WorkerId}", content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // Можно логировать ошибку
+                Console.WriteLine(ex);
+                return false;
             }
         }
     }

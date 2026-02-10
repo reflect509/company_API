@@ -5,7 +5,10 @@ using Desktop_app.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace Desktop_app.ViewModels
 {
@@ -17,7 +20,7 @@ namespace Desktop_app.ViewModels
         private readonly IApiService apiService;
         public ICommand NodeClickedCommand { get;}
         private const double NodeWidth = 200;
-        private const double NodeMinHeight = 100;
+        private const double NodeMinHeight = 130;
         private const double HorizontalSpacing = 40;
         private const double VerticalSpacing = 400;
 
@@ -93,7 +96,6 @@ namespace Desktop_app.ViewModels
             }
 
             CalculatePositions(rootNodes);
-            DrawConnections();
             DataLoaded?.Invoke(this, EventArgs.Empty);
         }
 
@@ -161,40 +163,6 @@ namespace Desktop_app.ViewModels
             }
         }
 
-        private void DrawConnections()
-        {
-            foreach (var node in Nodes)
-            {
-                DrawConnectionsForNode(node);
-            }            
-        }
-
-        private void DrawConnectionsForNode(Node parent)
-        {
-            if (parent.InverseParent != null)
-            {
-                foreach (var child in parent.InverseParent)
-                {                   
-                    double parentCenterX = parent.X + NodeWidth / 2;
-                    double parentBottomY = parent.Y + NodeMinHeight;   // Assuming node height of 50
-                    double childCenterX = child.X + NodeWidth / 2;
-                    double childTopY = child.Y;            
-
-                    var connection = new Connection
-                    {
-                        X1 = parentCenterX,
-                        Y1 = parentBottomY,
-                        X2 = childCenterX,
-                        Y2 = childTopY
-                    };
-
-                    Connections.Add(connection);
-
-                    DrawConnectionsForNode(child);
-                }
-            }
-        }
-
         public List<Worker> GetWorkers(Node node)
         {
             var workers = new List<Worker>();
@@ -243,6 +211,8 @@ namespace Desktop_app.ViewModels
             }
 
             var workerCardWindow = new WorkerCard(apiService, worker, Workers);
+            workerCardWindow.Width = SystemParameters.PrimaryScreenWidth * 0.9;
+            workerCardWindow.Height = SystemParameters.PrimaryScreenHeight * 0.9;
             workerCardWindow.ShowDialog();
         }
 
