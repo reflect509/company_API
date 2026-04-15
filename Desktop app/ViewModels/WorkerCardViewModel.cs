@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Desktop_app.Models;
 using Desktop_app.Services;
+using Desktop_app.Views;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,12 +24,16 @@ namespace Desktop_app.ViewModels
 
         private readonly IApiService apiService;
         public ICommand SaveWorkerCommand { get; }
+        public ICommand CreateEventCommand { get; }
+        private readonly Worker originalWorker;
 
         public WorkerCardViewModel(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
         {
             this.apiService = apiService;
-            LoadWorkers(selectedWorker, workers);
+            originalWorker = selectedWorker;
+            LoadWorkers(selectedWorker, workers);            
             SaveWorkerCommand = new RelayCommand<Worker>(OnSaveChangesClicked);
+            CreateEventCommand = new RelayCommand(OnCreateEventClicked);
         }
 
         private Worker selectedWorker;
@@ -54,18 +60,6 @@ namespace Desktop_app.ViewModels
             }
         }
 
-        private ObservableCollection<string> workerNames;
-
-        public ObservableCollection<string> WorkerNames
-        {
-            get { return workerNames; }
-            set
-            {
-                workerNames = value;
-                OnPropertyChanged(nameof(Workers));
-            }
-        }
-
         private ObservableCollection<Node> subdepartments;
 
         public ObservableCollection<Node> Subdepartments
@@ -77,17 +71,27 @@ namespace Desktop_app.ViewModels
                 OnPropertyChanged(nameof(Subdepartments));
             }
         }
+        private ObservableCollection<Event> events;
+
+        public ObservableCollection<Event> Events
+        {
+            get { return events; }
+            set
+            {
+                events = value; 
+                OnPropertyChanged(nameof(Events));
+            }
+        }
+
 
 
         private async Task LoadWorkers(Worker selectedWorker, ObservableCollection<Worker> workers)
         {
-            SelectedWorker = selectedWorker;
+            SelectedWorker = selectedWorker.Clone();
             Workers = new ObservableCollection<Worker>(workers);
-            WorkerNames = new ObservableCollection<string>(workers.Select(w => w.FullName));
             var subdepartments = await apiService.GetSubdepartmentsAsync();
             Subdepartments =  new ObservableCollection<Node>(subdepartments);
         }
-
         private async void OnSaveChangesClicked(Worker worker)
         {
             if (worker == null)
@@ -106,11 +110,14 @@ namespace Desktop_app.ViewModels
                 return;
             }
             try
-            {
+            {                
                 var result = await apiService.UpdateWorker(worker);
 
                 if (result)
-                    MessageBox.Show("Данные успешно сохранены.");
+                {
+                    originalWorker.CopyFrom(SelectedWorker);
+                    MessageBox.Show("Данные успешно сохранены.");                    
+                }                    
                 else
                     MessageBox.Show("Ошибка сохранения данных.");
             }
@@ -118,6 +125,20 @@ namespace Desktop_app.ViewModels
             {
                 MessageBox.Show(ex.Message, "Ошибка");
             }
+        }
+        public async Task LoadEventsAsync()
+        {
+            var events = await apiService.GetWorkerEventsAsync(SelectedWorker.WorkerId);
+
+            Events.Clear();
+
+            foreach (var ev in events)
+                Events.Add(ev);
+        }
+        private async void OnCreateEventClicked()
+        {
+            var AddEventWindow = new CreateEvent(apiService, SelectedWorker.WorkerId);
+            AddEventWindow.ShowDialog();
         }
         private void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         {

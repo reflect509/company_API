@@ -49,8 +49,19 @@ namespace Desktop_app.Models
                 _workPhone = value;
                 ValidatePhone(nameof(WorkPhone), _workPhone);
             }
-        }        
-        public required string Office { get; set; }
+        }
+        private string _office;
+
+        public string Office
+        {
+            get { return _office; }
+            set 
+            { 
+                _office = value;
+                ValidateOffice();
+            }
+        }      
+
         private string _email;
         public required string Email
         {
@@ -65,9 +76,9 @@ namespace Desktop_app.Models
         public required string JobPosition { get; set; }
         public required int SubdepartmentId { get; set; }
         public string? Supervisor { get; set; }
-        public string? SupervisorSupport { get; set; }
         // for UI
         public string? SubdepartmentName { get; set; }
+        public List<Event> Events { get; set; } = new List<Event>();
         private void ValidateFullName()
         {
             ClearErrors(nameof(FullName));
@@ -75,6 +86,11 @@ namespace Desktop_app.Models
             if (string.IsNullOrWhiteSpace(_fullName))
             {
                 AddError(nameof(FullName), "ФИО не может быть пустым");
+                return;
+            }
+            if (!Regex.IsMatch(_fullName, @"^[А-Яа-я\sё]+$"))
+            {
+                AddError(nameof(FullName), "ФИО может содержать только буквы");
                 return;
             }
 
@@ -110,7 +126,28 @@ namespace Desktop_app.Models
             {
                 AddError(nameof(Email), "Некорректный email");
             }
-        }       
+        }
+        private void ValidateOffice()
+        {
+            ClearErrors(nameof(Office));
+            if (string.IsNullOrWhiteSpace(_office))
+            {
+                AddError(nameof(Office), "Поле офис не может быть пустым");
+                return;
+            }
+                
+            if (!Regex.IsMatch(_office, @"^[А-Яа-я0-9]+$"))
+            {
+                AddError(nameof(Office), "Офис может содержать только буквы и цифры");
+                return;
+            }
+                
+            if (_office.Length > 10)
+            {
+                AddError(nameof(Office), "Поле офис не может быть длиннее 10 символов");
+                return;
+            }                
+        }
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -137,6 +174,38 @@ namespace Desktop_app.Models
         public IEnumerable<string> GetAllErrors()
         {
             return errors.SelectMany(e => e.Value);
+        }
+
+        public Worker Clone()
+        {
+            return new Worker
+            {
+                WorkerId = this.WorkerId,
+                FullName = this.FullName,
+                Phone = this.Phone,
+                WorkPhone = this.WorkPhone,
+                Birthdate = this.Birthdate,
+                Email = this.Email,
+                Office = this.Office,
+                IsSubdepartmentHead = this.IsSubdepartmentHead,
+                JobPosition = this.JobPosition,
+                SubdepartmentId = this.SubdepartmentId,
+                Supervisor = this.Supervisor
+            };
+        }
+        public void CopyFrom(Worker source)
+        {
+            WorkerId = source.WorkerId;
+            FullName = source.FullName;
+            Phone = source.Phone;
+            WorkPhone = source.WorkPhone;
+            Birthdate = source.Birthdate;
+            Email = source.Email;
+            Office = source.Office;
+            IsSubdepartmentHead = source.IsSubdepartmentHead;
+            JobPosition = source.JobPosition;
+            SubdepartmentId = source.SubdepartmentId;
+            Supervisor = source.Supervisor;
         }
 
     }

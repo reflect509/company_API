@@ -43,18 +43,6 @@
                                     <TextBox.Effect>
                                         <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
                                     </TextBox.Effect>
-                                    <TextBox.ToolTip>
-                                        <ItemsControl
-                                            ItemsSource="{Binding
-                                                RelativeSource={RelativeSource Self},
-                                                Path=(Validation.Errors)}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding ErrorContent}" />
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>    
-                                        </ItemsControl>
-                                    </TextBox.ToolTip>
                                 </TextBox>
 
                                 <TextBlock Text="Дата рождения:" FontSize="16" Foreground="#FF555555"/>
@@ -73,7 +61,9 @@
                                           FontSize="16"/> 
 
                                 <TextBlock Text="Должность:" FontSize="16" Foreground="#FF555555"/>
-                                <TextBox Text="{Binding SelectedWorker.JobPosition, Mode=TwoWay}" FontSize="16"
+                                <TextBox Text="{Binding SelectedWorker.JobPosition, Mode=TwoWay,
+                                         ValidatesOnNotifyDataErrors=True,
+                                         UpdateSourceTrigger=PropertyChanged}" FontSize="16"
                                      Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0">
                                     <TextBox.Effect>
                                         <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
@@ -103,7 +93,10 @@
                                 <TextBlock Text="Рабочий телефон:" FontSize="16" Foreground="#FF555555"/>
                                 <TextBox Text="{Binding SelectedWorker.WorkPhone, 
                                     ValidatesOnNotifyDataErrors=True, 
-                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="16"
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    PreviewTextInput="Phone_PreviewTextInput"
+                                    TextChanged="Phone_TextChanged"
+                                    MaxLength="18" FontSize="16"
                                      Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
                                     <TextBox.Effect>
                                         <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
@@ -121,8 +114,11 @@
                                 </TextBox>
 
                                 <TextBlock Text="Офис:" FontSize="16" Foreground="#FF555555"/>
-                                <TextBox Text="{Binding SelectedWorker.Office, Mode=TwoWay}" FontSize="16"
-                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0">
+                                <TextBox Text="{Binding SelectedWorker.Office, Mode=TwoWay, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0"
+                                     MaxLength="10">
                                     <TextBox.Effect>
                                         <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
                                     </TextBox.Effect>

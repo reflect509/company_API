@@ -60,7 +60,7 @@ namespace Desktop_app
 
         private void ViewModel_DataLoaded(object? sender, EventArgs e)
         {
-            SetCanvasSize();
+            InitializeCanvas();
         }
 
         private void SetCanvasSize()
@@ -71,7 +71,34 @@ namespace Desktop_app
 
             SubdepartmentCanvas.Width = maxX;
             SubdepartmentCanvas.Height = maxY;
+        }
 
+        private void CenterCanvas()
+        {
+            var scrollViewer = SubdepartmentScrollViewer; 
+
+            // canvas уже развернут в SetCanvasSize
+            double canvasWidth = SubdepartmentCanvas.Width;
+            double canvasHeight = SubdepartmentCanvas.Height;
+
+            double svViewportWidth = scrollViewer.ViewportWidth;
+            double svViewportHeight = scrollViewer.ViewportHeight;
+
+            // вычисляем центр Canvas
+            double centerX = (canvasWidth * _scaleValue - svViewportWidth) / 2;
+            double centerY = (canvasHeight * _scaleValue - svViewportHeight) / 2;
+
+            scrollViewer.ScrollToHorizontalOffset(centerX);
+            scrollViewer.ScrollToVerticalOffset(centerY);
+        }
+
+        private void InitializeCanvas()
+        {
+            _scaleValue = 0.2; 
+            SubdepartmentCanvas.LayoutTransform = new ScaleTransform(_scaleValue, _scaleValue);
+
+            SetCanvasSize();    // задаём Width/Height
+            CenterCanvas();         
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

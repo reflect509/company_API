@@ -112,5 +112,36 @@ namespace API.v1.Services
                 return false;
             }
         }
+
+        public async Task<Event> AddEventToWorkerAsync(int workerId, Event ev)
+        {
+            var worker = await context.Workers
+                .Include(w => w.Events)
+                .FirstOrDefaultAsync(w => w.WorkerId == workerId);
+
+            if (worker == null)
+                return null;
+
+            var newEvent = new Event
+            {
+                EventName = ev.EventName,
+                EventType = ev.EventType,
+                Status = "Active",
+                Date = ev.Date,
+                Description = ev.Description
+            };
+
+            worker.Events.Add(newEvent);
+            await context.SaveChangesAsync();
+
+            return newEvent;
+        }
+        public async Task<List<Event>> GetWorkerEventsAsync(int workerId)
+        {
+            return await context.Workers
+                .Where(w => w.WorkerId == workerId)
+                .SelectMany(w => w.Events)
+                .ToListAsync();
+        }
     }
 }

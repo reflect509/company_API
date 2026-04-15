@@ -51,5 +51,30 @@ namespace Desktop_app.Services
                 return false;
             }
         }
+
+        public async Task<Event> CreateWorkerEventAsync(int workerId, Event ev)
+        {
+            var json = JsonSerializer.Serialize(ev);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(
+                $"Workers/{workerId}/events",
+                content);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<Event>();
+        }
+
+        public async Task<List<Event>> GetWorkerEventsAsync(int workerId)
+        {
+            var response = await httpClient
+                .GetAsync($"Workers/{workerId}/events");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<Event>>();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using API.v1.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.v1.Controllers
 {
@@ -59,6 +60,33 @@ namespace API.v1.Controllers
 
             return Ok("Данные успешно обновлены.");
             
+        }
+        [HttpPost("Workers/{workerId}/events")]
+        public async Task<IActionResult> CreateWorkerEvent(int workerId,[FromBody] Event ev)
+        {
+            var createdEvent = await workerService
+                .AddEventToWorkerAsync(workerId, ev);
+
+            if (createdEvent == null)
+                return BadRequest("Worker не найден");
+
+            return Ok(new 
+            { 
+                createdEvent.EventId,
+                createdEvent.EventName,
+                createdEvent.EventType,
+                createdEvent.Status,
+                createdEvent.Date,
+                createdEvent.Description
+            });
+        }
+        [HttpGet("Workers/{workerId}/events")]
+        public async Task<IActionResult> GetWorkerEvents(int workerId)
+        {
+            var events = await workerService
+                .GetWorkerEventsAsync(workerId);
+
+            return Ok(events);
         }
     }
 }

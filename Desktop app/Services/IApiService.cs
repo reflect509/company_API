@@ -11,5 +11,7 @@ namespace Desktop_app.Services
     {
         Task<IEnumerable<Node>> GetSubdepartmentsAsync();
         Task<bool> UpdateWorker(Worker worker);
+        Task<Event> CreateWorkerEventAsync(int workerId, Event ev);
+        Task<List<Event>> GetWorkerEventsAsync(int workerId);
     }
 }
