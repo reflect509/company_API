@@ -65,7 +65,9 @@ namespace Desktop_app.Views
 
         private void OnExit(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Close();
         }
     }
 }

@@ -44,8 +44,15 @@ namespace Desktop_app
             Loaded += (_, _) =>
             {
                 Dispatcher.BeginInvoke(
-                    DispatcherPriority.Loaded,
-                    RebuildConnections);
+                DispatcherPriority.Loaded,
+                () =>
+                {
+                // Даём время на рендеринг элементов
+                Task.Delay(300).ContinueWith(_ =>
+                {
+                    Dispatcher.Invoke(RebuildConnections);
+                });
+            });
             };
         }
                 
@@ -61,6 +68,15 @@ namespace Desktop_app
         private void ViewModel_DataLoaded(object? sender, EventArgs e)
         {
             InitializeCanvas();
+            Dispatcher.BeginInvoke(
+        DispatcherPriority.Loaded,
+        () =>
+        {
+            Task.Delay(300).ContinueWith(_ =>
+            {
+                Dispatcher.Invoke(RebuildConnections);
+            });
+        });
         }
 
         private void SetCanvasSize()

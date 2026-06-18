@@ -76,5 +76,24 @@ namespace Desktop_app.Services
             return await response.Content
                 .ReadFromJsonAsync<List<Event>>();
         }
+
+        public async Task<bool> LoginAsync(string username, string password)
+        {
+            try
+            {
+                var loginRequest = new { UserName = username, UserPassword = password };
+                var json = JsonSerializer.Serialize(loginRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("SignIn", content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Login Error: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace Desktop_app.Services
         Task<bool> UpdateWorker(Worker worker);
         Task<Event> CreateWorkerEventAsync(int workerId, Event ev);
         Task<List<Event>> GetWorkerEventsAsync(int workerId);
+        Task<bool> LoginAsync(string username, string password);
     }
 }
