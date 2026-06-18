@@ -134,7 +134,7 @@ namespace Desktop_app.ViewModels
 
         private void CloseWindow()
         {
-            Application.Current.Windows.OfType<CreateEvent>().FirstOrDefault()?.Close();
+            //Application.Current.Windows.OfType<CreateEvent>().FirstOrDefault()?.Close();
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

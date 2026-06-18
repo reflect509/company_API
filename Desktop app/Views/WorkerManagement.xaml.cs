@@ -21,7 +21,7 @@ namespace Desktop_app
     /// <summary>
     /// Interaction logic for WorkerManagement.xaml
     /// </summary>
-    public partial class WorkerManagement : Window
+    public partial class WorkerManagement : UserControl
     {
         private WorkerManagementViewModel vm;
         private double _scaleValue = 1;
@@ -167,7 +167,6 @@ namespace Desktop_app
 
             // скрываем остальные элементы
             WorkerListBox.Visibility = Visibility.Hidden;
-            TopPanel.Visibility = Visibility.Hidden;
         }
 
         private void ExitFullscreen()
@@ -177,8 +176,7 @@ namespace Desktop_app
             Grid.SetRowSpan(SubdepartmentGrid, _subdepartmentGridOriginalRowSpan);
             Grid.SetColumnSpan(SubdepartmentGrid, _subdepartmentGridOriginalColumnSpan);
 
-            WorkerListBox.Visibility = Visibility.Visible;
-            TopPanel.Visibility = Visibility.Visible;       
+            WorkerListBox.Visibility = Visibility.Visible;   
         }
         private void FullscreenButton_Click(object sender, RoutedEventArgs e)
         {

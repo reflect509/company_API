@@ -21,7 +21,7 @@ namespace Desktop_app.Views
     /// <summary>
     /// Interaction logic for WorkerCard.xaml
     /// </summary>
-    public partial class WorkerCard : Window
+    public partial class WorkerCard : UserControl
     {
         private bool _isFormatting;
         public WorkerCard(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
@@ -73,6 +73,11 @@ namespace Desktop_app.Views
                 return $"+7 ({digits[..3]}) {digits[3..6]}-{digits[6..]}";
 
             return $"+7 ({digits[..3]}) {digits[3..6]}-{digits[6..8]}-{digits[8..]}";
+        }
+
+        private void OnBackClicked(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.NavigateBack();
         }
     }
 }

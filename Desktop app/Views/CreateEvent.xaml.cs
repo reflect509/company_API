@@ -4,10 +4,11 @@ using Desktop_app.ViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Desktop_app.Views
 {
-    public partial class CreateEvent : Window
+    public partial class CreateEvent : UserControl
     {
         public CreateEvent(IApiService apiService, int workerId)
         {

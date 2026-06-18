@@ -66,10 +66,13 @@ namespace Desktop_app.ViewModels
         {
             get { return selectedWorker; }
             set 
-            { 
+            {
                 selectedWorker = value;
-                OnPropertychanged();
-                OnWorkerSelected(selectedWorker);
+                OnPropertychanged(nameof(SelectedWorker));
+                if (value != null)
+                {
+                    OnWorkerSelected(selectedWorker);
+                }
             }
         }
 
@@ -209,11 +212,7 @@ namespace Desktop_app.ViewModels
             {
                 return;
             }
-
-            var workerCardWindow = new WorkerCard(apiService, worker, Workers);
-            workerCardWindow.Width = SystemParameters.PrimaryScreenWidth * 0.9;
-            workerCardWindow.Height = SystemParameters.PrimaryScreenHeight * 0.9;
-            workerCardWindow.ShowDialog();
+            MainWindow.Instance.NavigateToWorkerCard(worker);
         }
 
         private void OnPropertychanged([CallerMemberName] string propertyName = null)
