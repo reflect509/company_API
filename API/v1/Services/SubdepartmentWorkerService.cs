@@ -34,6 +34,7 @@ namespace API.v1.Services
             return await context.Subdepartments
                 .FromSqlRaw(query)
                 .Include(s => s.Workers)
+                .ThenInclude(w => w.Events)
                 .ToListAsync();
         }
     }

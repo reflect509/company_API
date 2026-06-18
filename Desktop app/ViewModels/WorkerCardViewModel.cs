@@ -30,7 +30,9 @@ namespace Desktop_app.ViewModels
         public WorkerCardViewModel(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
         {
             this.apiService = apiService;
+            LoadEventsAsync(selectedWorker);
             originalWorker = selectedWorker;
+
             LoadWorkers(selectedWorker, workers);            
             SaveWorkerCommand = new RelayCommand<Worker>(OnSaveChangesClicked);
             CreateEventCommand = new RelayCommand(OnCreateEventClicked);
@@ -71,14 +73,14 @@ namespace Desktop_app.ViewModels
                 OnPropertyChanged(nameof(Subdepartments));
             }
         }
-        private ObservableCollection<Event> events;
+        private ObservableCollection<Event> events = new ObservableCollection<Event>();
 
         public ObservableCollection<Event> Events
         {
             get { return events; }
             set
             {
-                events = value; 
+                events = value;
                 OnPropertyChanged(nameof(Events));
             }
         }
@@ -126,11 +128,14 @@ namespace Desktop_app.ViewModels
                 MessageBox.Show(ex.Message, "Ошибка");
             }
         }
-        public async Task LoadEventsAsync()
+        public async Task LoadEventsAsync(Worker worker)
         {
-            var events = await apiService.GetWorkerEventsAsync(SelectedWorker.WorkerId);
+            var events = await apiService.GetWorkerEventsAsync(worker.WorkerId);
 
-            Events.Clear();
+            if (Events != null)
+            {
+                Events.Clear();
+            }                
 
             foreach (var ev in events)
                 Events.Add(ev);

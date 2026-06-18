@@ -153,6 +153,7 @@
                     <!-- Сохранить изменения -->
                     <Button  Content="Сохранить изменения"
                         Command="{Binding SaveWorkerCommand}"
+                             Padding="15,10"
                         CommandParameter="{Binding SelectedWorker}"
                         FontSize="18" FontWeight="SemiBold"
                         Height="50" 
@@ -160,9 +161,20 @@
                         BorderThickness="0" Margin="10 0 40 0">
                     </Button>
 
+                    <!-- Кнопка СОБЫТИЯ (рядом с Сохранить) -->
+                    <Button 
+                    Content="События сотрудника"
+                    Click="OnEventsClicked"
+                    Background="{StaticResource DarkOrangeBrush}"
+                    Foreground="White" FontWeight="SemiBold"
+                    Padding="15,10"
+                    FontSize="16"
+                    HorizontalAlignment="Left" Margin="0 0 40 0"/>
+
                     <!-- Создать событие -->
                     <Button  Content="Создать событие"
                         Command="{Binding CreateEventCommand}"
+                             Padding="15,10"
                         FontSize="16" FontWeight="SemiBold"
                         Height="50"
                         Background="{StaticResource DarkOrangeBrush}" Foreground="White"
@@ -170,6 +182,7 @@
                     </Button>
 
                     <Button  Content="Назад" Click="OnBackClicked"
+                             Padding="15,10"
                             HorizontalAlignment="Left" Margin="0 0 10 0"
                              FontSize="16" FontWeight="SemiBold" Foreground="White"
                             Height="50"

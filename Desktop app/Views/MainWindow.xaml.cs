@@ -11,6 +11,7 @@ namespace Desktop_app.Views
     public partial class MainWindow : Window
     {
         public static MainWindow Instance { get; private set; }
+        public ContentControl ContentAreaControl => ContentArea; // Если его нет в свойствах
 
         private readonly IApiService apiService;
         private WorkerManagement workerManagementControl;

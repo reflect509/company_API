@@ -79,5 +79,20 @@ namespace Desktop_app.Views
         {
             MainWindow.Instance.NavigateBack();
         }
+
+        private void OnEventsClicked(object sender, RoutedEventArgs e)
+        {
+            var vm = (WorkerCardViewModel)this.DataContext;
+
+            if (vm.SelectedWorker == null)
+            {
+                MessageBox.Show("Сотрудник не выбран", "Ошибка");
+                return;
+            }
+
+            var eventsControl = new WorkerEvents();
+            eventsControl.SetWorker(vm.Workers[0]);
+            MainWindow.Instance.ContentArea.Content = eventsControl;
+        }
     }
 }
