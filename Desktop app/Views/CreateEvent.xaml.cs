@@ -10,13 +10,13 @@ namespace Desktop_app.Views
 {
     public partial class CreateEvent : UserControl
     {
-        public CreateEvent(IApiService apiService, int workerId)
+        public CreateEvent(IApiService apiService, Worker worker)
         {
             InitializeComponent();
-            FillEventTypesCombobox(apiService, workerId);
+            FillEventTypesCombobox(apiService, worker);
         }
 
-        private void FillEventTypesCombobox(IApiService apiService, int workerId)
+        private void FillEventTypesCombobox(IApiService apiService, Worker worker)
         {
             var eventTypes = new ObservableCollection<string>
             {
@@ -26,7 +26,7 @@ namespace Desktop_app.Views
                 "Обучение"
             };
 
-            var viewModel = new CreateEventViewModel(apiService, workerId)
+            var viewModel = new CreateEventViewModel(apiService, worker)
             {
                 EventTypes = eventTypes
             };

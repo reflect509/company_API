@@ -51,6 +51,12 @@ namespace Desktop_app.Views
             ContentArea.Content = workerCardControl;
         }
 
+        public void NavigateToCreateEvent(Worker worker)
+        {
+            eventCardControl = new CreateEvent(apiService, worker);
+            ContentArea.Content = eventCardControl;
+        }
+
         public void NavigateBack()
         {
             ContentArea.Content = workerManagementControl;

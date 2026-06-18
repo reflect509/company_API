@@ -19,6 +19,7 @@ namespace Desktop_app.ViewModels
 
         private readonly IApiService apiService;
         private readonly int workerId;
+        private readonly Worker worker;
         private ObservableCollection<string> eventTypes;
         private string selectedEventType;
         private DateTime? eventDate;
@@ -67,10 +68,11 @@ namespace Desktop_app.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public CreateEventViewModel(IApiService apiService, int workerId)
+        public CreateEventViewModel(IApiService apiService, Worker worker)
         {
             this.apiService = apiService;
-            this.workerId = workerId;
+            this.worker = worker;
+            this.workerId = worker.WorkerId;
 
             SaveCommand = new RelayCommand(OnSaveClicked);
             CancelCommand = new RelayCommand(OnCancelClicked);
@@ -134,7 +136,7 @@ namespace Desktop_app.ViewModels
 
         private void CloseWindow()
         {
-            //Application.Current.Windows.OfType<CreateEvent>().FirstOrDefault()?.Close();
+            MainWindow.Instance.NavigateToWorkerCard(worker);
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

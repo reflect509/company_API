@@ -137,8 +137,7 @@ namespace Desktop_app.ViewModels
         }
         private async void OnCreateEventClicked()
         {
-            var AddEventWindow = new CreateEvent(apiService, SelectedWorker.WorkerId);
-            //AddEventWindow.ShowDialog();
+            MainWindow.Instance.NavigateToCreateEvent(SelectedWorker);
         }
         private void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         {
