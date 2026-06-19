@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!-- SIDEBAR -->
-        <StackPanel Grid.Column="0" Background="#F5F5F5" Margin="0" 
+        <StackPanel Grid.Column="0" Margin="0" Background="White"
                     HorizontalAlignment="Left" Grid.RowSpan="2" Grid.Row="0">
             
             <Border Background="#FF6B35" Padding="15">
@@ -34,28 +34,12 @@
                 <TextBlock Text="👥 Управление персоналом" TextAlignment="Left" />
             </Button>
 
-            <Button x:Name="DocumentsBtn" Click="OnNavigate" Tag="Documents" 
+            <Button x:Name="DocumentsBtn" Click="OnNavigate" Tag="Workers" 
                     Height="50" Margin="0" Padding="15" 
                     HorizontalAlignment="Left" 
                     Background="White" BorderThickness="0"
                     FontSize="14" Foreground="Black">
-                <TextBlock Text="📄 Документы" TextAlignment="Left"/>
-            </Button>
-
-            <Button x:Name="NewsBtn" Click="OnNavigate" Tag="News" 
-                    Height="50" Margin="0" Padding="15" 
-                    HorizontalAlignment="Left" 
-                    Background="White" BorderThickness="0"
-                    FontSize="14" Foreground="Black">
-                <TextBlock Text="📰 Новости" TextAlignment="Left"/>
-            </Button>
-
-            <Button x:Name="EventsBtn" Click="OnNavigate" Tag="Events" 
-                    Height="50" Margin="0" Padding="15" 
-                    HorizontalAlignment="Left" 
-                    Background="White" BorderThickness="0"
-                    FontSize="14" Foreground="Black">
-                <TextBlock Text="📅 События" TextAlignment="Left"/>
+                <TextBlock Text="📄 Сотрудники" TextAlignment="Left"/>
             </Button>
 
             <Separator Margin="0,20"/>

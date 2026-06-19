@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Desktop_app.ViewModels
@@ -16,7 +17,7 @@ namespace Desktop_app.ViewModels
     public class CreateEventViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        private UserControl previousControl;
         private readonly IApiService apiService;
         private readonly int workerId;
         private readonly Worker worker;
@@ -134,9 +135,17 @@ namespace Desktop_app.ViewModels
             CloseWindow();
         }
 
+        public void SetPreviousControl(UserControl control)
+        {
+            previousControl = control;
+        }
+
         private void CloseWindow()
         {
-            MainWindow.Instance.NavigateToWorkerCard(worker);
+            if (previousControl != null)
+            {
+                MainWindow.Instance.ContentArea.Content = previousControl;
+            }
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

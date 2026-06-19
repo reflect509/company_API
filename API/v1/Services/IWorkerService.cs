@@ -9,5 +9,7 @@ namespace API.v1.Services
         Task<(bool Success, string Error)> UpdateWorkerAsync(Worker worker);
         Task<Event> AddEventToWorkerAsync(int workerId, Event ev);
         Task<List<Event>> GetWorkerEventsAsync(int workerId);
+        Task<(bool Success, string Error)> CreateWorkerAsync(Worker worker); // Новый
+        Task<(bool Success, string Error)> DeleteWorkerAsync(int workerId); // Новый
     }
 }

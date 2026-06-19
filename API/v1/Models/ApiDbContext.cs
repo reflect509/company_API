@@ -29,7 +29,6 @@ public partial class ApiDbContext : DbContext
 
     public virtual DbSet<Worker> Workers { get; set; }
 
-    public virtual DbSet<Workingcalendar> Workingcalendars { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         => optionsBuilder.UseNpgsql("Name=DefaultConnection");
@@ -238,26 +237,9 @@ public partial class ApiDbContext : DbContext
                         j.IndexerProperty<int>("EventId").HasColumnName("event_id");
                     });
         });
-
-        modelBuilder.Entity<Workingcalendar>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("workingcalendar_pk");
-
-            entity.ToTable("workingcalendar", tb => tb.HasComment("Список дней исключений в производственном календаре"));
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Exceptiondate)
-                .HasComment("День-исключение")
-                .HasColumnName("exceptiondate");
-            entity.Property(e => e.Isworkingday)
-                .HasComment("0 - будний день, но законодательно принят выходным; 1 - сб или вс, но является рабочим")
-                .HasColumnName("isworkingday");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
     }
+
+        
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

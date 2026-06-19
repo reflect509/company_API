@@ -181,6 +181,15 @@
                         BorderThickness="0" Margin="0 0 40 0">
                     </Button>
 
+                    <Button 
+                    Content="Удалить сотрудника"
+                    Click="OnDeleteWorkerClicked"
+                             Padding="15,10"
+                        FontSize="16" FontWeight="SemiBold"
+                        Height="50"
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="0 0 40 0"/>
+
                     <Button  Content="Назад" Click="OnBackClicked"
                              Padding="15,10"
                             HorizontalAlignment="Left" Margin="0 0 10 0"

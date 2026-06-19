@@ -24,9 +24,20 @@ namespace Desktop_app.Views
     public partial class WorkerCard : UserControl
     {
         private bool _isFormatting;
-        public WorkerCard(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
+
+        private IApiService apiService;
+        private Worker selectedWorker;
+        private string previousScreen;
+        private UserControl previousControl;
+        public WorkerCard(IApiService apiService, Worker selectedWorker, 
+            ObservableCollection<Worker> workers, string previousScreen = "WorkerManagement",
+            UserControl previousControl = null)
         {
             InitializeComponent();
+            this.apiService = apiService;
+            this.selectedWorker = selectedWorker;
+            this.previousScreen = previousScreen;
+            this.previousControl = previousControl;
 
             this.DataContext = new WorkerCardViewModel(apiService, selectedWorker, workers);
         }
@@ -77,7 +88,18 @@ namespace Desktop_app.Views
 
         private void OnBackClicked(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.NavigateBack();
+            if (previousControl != null)
+            {
+                MainWindow.Instance.ContentArea.Content = previousControl;
+            }
+            else if (previousScreen == "WorkersList")
+            {
+                var workersListControl = new WorkersListControl();
+                workersListControl.RefreshWorkers();
+                MainWindow.Instance.ContentArea.Content = workersListControl;
+            }
+            else 
+                MainWindow.Instance.NavigateBack();
         }
 
         private void OnEventsClicked(object sender, RoutedEventArgs e)
@@ -91,8 +113,48 @@ namespace Desktop_app.Views
             }
 
             var eventsControl = new WorkerEvents();
-            eventsControl.SetWorker(vm.Workers[0]);
+            eventsControl.SetWorker(vm.Workers[0], this);
             MainWindow.Instance.ContentArea.Content = eventsControl;
+        }
+
+        private async void OnDeleteWorkerClicked(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                $"Вы уверены, что хотите удалить сотрудника {selectedWorker.FullName}?",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                bool success = await apiService.DeleteWorkerAsync(selectedWorker.WorkerId);
+
+                if (success)
+                {
+                    MessageBox.Show("Сотрудник успешно удалён", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (previousScreen == "WorkersList")
+                    {
+                        var workersListControl = new WorkersListControl();
+                        workersListControl.RefreshWorkers();
+                        MainWindow.Instance.ContentArea.Content = workersListControl;
+                    }
+                    else
+                    {
+                        MainWindow.Instance.NavigateBack();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка при удалении сотрудника", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

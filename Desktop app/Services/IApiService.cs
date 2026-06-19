@@ -14,5 +14,8 @@ namespace Desktop_app.Services
         Task<Event> CreateWorkerEventAsync(int workerId, Event ev);
         Task<List<Event>> GetWorkerEventsAsync(int workerId);
         Task<bool> LoginAsync(string username, string password);
+        Task<Worker> CreateWorkerAsync(Worker worker); 
+
+        Task<bool> DeleteWorkerAsync(int workerId);
     }
 }

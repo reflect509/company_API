@@ -88,5 +88,30 @@ namespace API.v1.Controllers
 
             return Ok(events);
         }
+
+        [HttpPost("Workers")]
+        public async Task<IActionResult> CreateWorker([FromBody] Worker worker)
+        {
+            if (worker == null)
+                return BadRequest("Данные сотрудника не переданы");
+
+            var result = await workerService.CreateWorkerAsync(worker);
+
+            if (!result.Success)
+                return BadRequest(result.Error);
+
+            return Ok(new { message = "Сотрудник успешно добавлен" });
+        }
+
+        [HttpDelete("Workers/{workerId}")]
+        public async Task<IActionResult> DeleteWorker(int workerId)
+        {
+            var result = await workerService.DeleteWorkerAsync(workerId);
+
+            if (!result.Success)
+                return BadRequest(result.Error);
+
+            return Ok(new { message = "Сотрудник успешно удалён" });
+        }
     }
 }

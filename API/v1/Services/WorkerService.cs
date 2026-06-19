@@ -143,5 +143,45 @@ namespace API.v1.Services
                 .SelectMany(w => w.Events)
                 .ToListAsync();
         }
+        public async Task<(bool Success, string Error)> CreateWorkerAsync(Worker worker)
+        {
+            try
+            {
+                // Проверяем уникальность телефона
+                var existingPhone = await context.Workers
+                    .FirstOrDefaultAsync(w => w.WorkPhone == worker.WorkPhone);
+
+                if (existingPhone != null)
+                    return (false, "Сотрудник с таким рабочим телефоном уже существует");
+
+                context.Workers.Add(worker);
+                await context.SaveChangesAsync();
+
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при создании: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Success, string Error)> DeleteWorkerAsync(int workerId)
+        {
+            try
+            {
+                var worker = await context.Workers.FindAsync(workerId);
+                if (worker == null)
+                    return (false, "Сотрудник не найден");
+
+                context.Workers.Remove(worker);
+                await context.SaveChangesAsync();
+
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Ошибка при удалении: {ex.Message}");
+            }
+        }
     }
 }

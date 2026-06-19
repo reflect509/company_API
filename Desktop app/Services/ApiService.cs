@@ -95,5 +95,44 @@ namespace Desktop_app.Services
                 return false;
             }
         }
+
+        public async Task<Worker> CreateWorkerAsync(Worker worker)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(worker);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("Workers", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<Worker>();
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Server error: {response.StatusCode} - {errorResponse}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка добавления сотрудника: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> DeleteWorkerAsync(int workerId)
+        {
+            try
+            {
+                var response = await httpClient.DeleteAsync($"Workers/{workerId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Delete error: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

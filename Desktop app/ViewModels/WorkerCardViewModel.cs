@@ -22,6 +22,7 @@ namespace Desktop_app.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+
         private readonly IApiService apiService;
         public ICommand SaveWorkerCommand { get; }
         public ICommand CreateEventCommand { get; }

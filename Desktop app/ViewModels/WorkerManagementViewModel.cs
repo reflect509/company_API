@@ -212,12 +212,31 @@ namespace Desktop_app.ViewModels
             {
                 return;
             }
-            MainWindow.Instance.NavigateToWorkerCard(worker);
+            var workerCard = new WorkerCard(apiService, worker, Workers, "WorkerManagement"); // Передаём "WorkerManagement"
+            MainWindow.Instance.NavigateToWorkerCard(workerCard);
         }
 
         private void OnPropertychanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void LoadAllWorkers()
+        {
+            // Очищаем и загружаем всех сотрудников
+            Workers.Clear();
+            HashSet<Worker> set = new HashSet<Worker>();
+
+            foreach (var node in Nodes)
+            {
+                var workersInNode = GetWorkers(node);
+                foreach (var worker in workersInNode)
+                {
+                    set.Add(worker);
+                }
+            }
+
+            Workers = new ObservableCollection<Worker>(set);
         }
     }
 }

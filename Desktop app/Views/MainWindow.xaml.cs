@@ -17,6 +17,8 @@ namespace Desktop_app.Views
         private WorkerManagement workerManagementControl;
         private WorkerCard workerCardControl;
         private CreateEvent eventCardControl;
+        private WorkersListControl workersListControl;
+        private AddWorkerControl addWorkerControl;
 
         public MainWindow()
         {
@@ -27,6 +29,8 @@ namespace Desktop_app.Views
 
             // Инициализируем контролы
             workerManagementControl = new WorkerManagement();
+            workersListControl = new WorkersListControl();
+            addWorkerControl = new AddWorkerControl();
 
             // По умолчанию показываем WorkerManagement
             ContentArea.Content = workerManagementControl;
@@ -42,14 +46,28 @@ namespace Desktop_app.Views
                 case "WorkerManagement":
                     ContentArea.Content = workerManagementControl;
                     break;
+                case "Workers":
+                    ContentArea.Content = workersListControl;
+                    workersListControl.RefreshWorkers();
+                    break;
             }
         }
 
-        public void NavigateToWorkerCard(Worker worker)
+        public void NavigateToWorkerCard(WorkerCard card)
+{
+    workerCardControl = card;
+    ContentArea.Content = workerCardControl;
+}
+
+        public void NavigateToAddWorker()
         {
-            workerCardControl = new WorkerCard(apiService, worker,
-                ((WorkerManagementViewModel)workerManagementControl.DataContext).Workers);
-            ContentArea.Content = workerCardControl;
+            ContentArea.Content = addWorkerControl;
+        }
+
+        public void NavigateToWorkersList()
+        {
+            ContentArea.Content = workersListControl;
+            workersListControl.RefreshWorkers();
         }
 
         public void NavigateToCreateEvent(Worker worker)
