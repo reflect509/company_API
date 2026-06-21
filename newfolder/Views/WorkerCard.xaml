@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="Desktop_app.Views.WorkerCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Desktop_app.Views"
+        mc:Ignorable="d">
+    <Grid>
+        <!-- Фоновый градиент -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FFF4F4F4" Offset="0"/>
+                <GradientStop Color="#FFEFEFEF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Основная карточка -->
+        <Border BorderBrush="#FFEF6C00" BorderThickness="2" CornerRadius="10" Margin="20" Background="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Scrollable Content -->
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="10">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+
+                        <!-- Раздел: Основная информация -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Основная информация" FontSize="18" FontWeight="Bold" Foreground="#FF333333" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="ФИО работника:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.FullName, Mode=TwoWay,
+                                         ValidatesOnNotifyDataErrors=True,
+                                         UpdateSourceTrigger=PropertyChanged}" 
+                                         FontSize="16" MinWidth="600"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Дата рождения:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Birthdate}" IsReadOnly="True" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Подразделение:" FontSize="16" Foreground="#FF555555"/>
+                                <ComboBox ItemsSource="{Binding Subdepartments}"
+                                          DisplayMemberPath="SubdepartmentName"
+                                          SelectedValuePath="SubdepartmentId"
+                                          SelectedValue="{Binding SelectedWorker.SubdepartmentId, Mode=TwoWay}"
+                                          FontSize="16"/> 
+
+                                <TextBlock Text="Должность:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.JobPosition, Mode=TwoWay,
+                                         ValidatesOnNotifyDataErrors=True,
+                                         UpdateSourceTrigger=PropertyChanged}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Раздел: Контактная информация -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Контактная информация" FontSize="18" FontWeight="Bold" Foreground="#FF333333" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Телефон работника:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Phone, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged}"
+                                                PreviewTextInput="Phone_PreviewTextInput"
+                                                TextChanged="Phone_TextChanged"
+                                                MaxLength="18" FontSize="16"
+                                                Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Рабочий телефон:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.WorkPhone, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    PreviewTextInput="Phone_PreviewTextInput"
+                                    TextChanged="Phone_TextChanged"
+                                    MaxLength="18" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Почта:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Email, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+
+                                <TextBlock Text="Офис:" FontSize="16" Foreground="#FF555555"/>
+                                <TextBox Text="{Binding SelectedWorker.Office, Mode=TwoWay, 
+                                    ValidatesOnNotifyDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged}" FontSize="16"
+                                     Padding="5" BorderBrush="#FFCCCCCC" BorderThickness="1" Background="#FFFDFDFD" Margin="0,0,0,0"
+                                     MaxLength="10">
+                                    <TextBox.Effect>
+                                        <DropShadowEffect Color="#33000000" BlurRadius="4" ShadowDepth="2"/>
+                                    </TextBox.Effect>
+                                </TextBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Раздел: Руководитель и помощник -->
+                        <Border Background="#FFF9F9F9" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Руководитель:" FontSize="16" Foreground="#FF555555"/>
+                                    <ComboBox ItemsSource="{Binding Workers}" 
+                                              DisplayMemberPath="FullName"
+                                              SelectedValuePath="FullName"
+                                              SelectedValue="{Binding SelectedWorker.Supervisor, Mode=TwoWay}" 
+                                              FontSize="16"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Кнопки: Сохранить изменения + Создать событие -->
+                <StackPanel Grid.Row="1" Margin="0,10" Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+
+                    <!-- Сохранить изменения -->
+                    <Button  Content="Сохранить изменения"
+                        Command="{Binding SaveWorkerCommand}"
+                             Padding="15,10"
+                        CommandParameter="{Binding SelectedWorker}"
+                        FontSize="18" FontWeight="SemiBold"
+                        Height="50" 
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="10 0 40 0">
+                    </Button>
+
+                    <!-- Кнопка СОБЫТИЯ (рядом с Сохранить) -->
+                    <Button 
+                    Content="События сотрудника"
+                    Click="OnEventsClicked"
+                    Background="{StaticResource DarkOrangeBrush}"
+                    Foreground="White" FontWeight="SemiBold"
+                    Padding="15,10"
+                    FontSize="16"
+                    HorizontalAlignment="Left" Margin="0 0 40 0"/>
+
+                    <!-- Создать событие -->
+                    <Button  Content="Создать событие"
+                        Command="{Binding CreateEventCommand}"
+                             Padding="15,10"
+                        FontSize="16" FontWeight="SemiBold"
+                        Height="50"
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="0 0 40 0">
+                    </Button>
+
+                    <Button 
+                    Content="Удалить сотрудника"
+                    Click="OnDeleteWorkerClicked"
+                             Padding="15,10"
+                        FontSize="16" FontWeight="SemiBold"
+                        Height="50"
+                        Background="{StaticResource DarkOrangeBrush}" Foreground="White"
+                        BorderThickness="0" Margin="0 0 40 0"/>
+
+                    <Button  Content="Назад" Click="OnBackClicked"
+                             Padding="15,10"
+                            HorizontalAlignment="Left" Margin="0 0 10 0"
+                             FontSize="16" FontWeight="SemiBold" Foreground="White"
+                            Height="50"
+                            Background="{StaticResource DarkOrangeBrush}"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

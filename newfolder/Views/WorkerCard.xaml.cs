@@ -27,12 +27,17 @@ namespace Desktop_app.Views
 
         private IApiService apiService;
         private Worker selectedWorker;
+        private string previousScreen;
+        private UserControl previousControl;
         public WorkerCard(IApiService apiService, Worker selectedWorker, 
-            ObservableCollection<Worker> workers)
+            ObservableCollection<Worker> workers, string previousScreen = "WorkerManagement",
+            UserControl previousControl = null)
         {
             InitializeComponent();
             this.apiService = apiService;
             this.selectedWorker = selectedWorker;
+            this.previousScreen = previousScreen;
+            this.previousControl = previousControl;
 
             this.DataContext = new WorkerCardViewModel(apiService, selectedWorker, workers);
         }
@@ -97,7 +102,7 @@ namespace Desktop_app.Views
             }
 
             var eventsControl = new WorkerEvents();
-            eventsControl.SetWorker(vm.Workers[0]);
+            eventsControl.SetWorker(vm.Workers[0], this);
             MainWindow.Instance.Navigate(eventsControl);
         }
 
@@ -119,7 +124,17 @@ namespace Desktop_app.Views
                 if (success)
                 {
                     MessageBox.Show("Сотрудник успешно удалён", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    MainWindow.Instance.GoBack();
+                    if (previousScreen == "WorkersList")
+                    {
+                        //var workersListControl = new WorkersListControl();
+                        //workersListControl.RefreshWorkers();
+                        //MainWindow.Instance.ContentArea.Content = workersListControl;
+                        MainWindow.Instance.GoBack();
+                    }
+                    else
+                    {
+                        MainWindow.Instance.GoBack();
+                    }
                 }
                 else
                 {

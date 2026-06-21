@@ -12,6 +12,7 @@ namespace Desktop_app.Views
     {
         private WorkerManagementViewModel vm;
         private IApiService apiService;
+        private WorkersListControl previousControl; // Сохраняем WorkersList
 
 
         public WorkersListControl()
@@ -40,12 +41,16 @@ namespace Desktop_app.Views
 
         private void OnAddWorkerClicked(object sender, RoutedEventArgs e)
         {
+            //var addWorkerControl = new AddWorkerControl(); // Передаём this
+            //MainWindow.Instance.ContentArea.Content = addWorkerControl;
             MainWindow.Instance.Navigate(new AddWorkerControl());
         }
 
         private void OpenWorkerCard(Worker worker)
         {
-            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, vm.Workers));
+            //var workerCard = new WorkerCard(apiService, worker, vm.Workers, "WorkersList");
+            //MainWindow.Instance.ContentArea.Content = workerCard;
+            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, vm.Workers, "WorkersList"));
         }
 
         public void RefreshWorkers()

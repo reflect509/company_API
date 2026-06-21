@@ -106,7 +106,7 @@ namespace Desktop_app.ViewModels
                 await apiService.CreateWorkerEventAsync(workerId, newEvent);
 
                 MessageBox.Show("Событие успешно создано.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                OnCancelClicked();
+                CloseWindow();
             }
             catch (Exception ex)
             {
@@ -132,8 +132,23 @@ namespace Desktop_app.ViewModels
 
         private void OnCancelClicked()
         {
+            CloseWindow();
+        }
+
+        public void SetPreviousControl(UserControl control)
+        {
+            previousControl = control;
+        }
+
+        private void CloseWindow()
+        {
+            //if (previousControl != null)
+            //{
+            //    MainWindow.Instance.ContentArea.Content = previousControl;
+            //}
             MainWindow.Instance.GoBack();
         }
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

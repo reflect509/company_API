@@ -212,7 +212,9 @@ namespace Desktop_app.ViewModels
             {
                 return;
             }
-            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, Workers));
+            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, Workers, "WorkerManagement"));
+            //var workerCard = new WorkerCard(apiService, worker, Workers, "WorkerManagement"); // Передаём "WorkerManagement"
+            //MainWindow.Instance.NavigateToWorkerCard(workerCard);
         }
 
         private void OnPropertychanged([CallerMemberName] string propertyName = null)

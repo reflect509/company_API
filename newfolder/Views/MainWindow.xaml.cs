@@ -69,6 +69,36 @@ namespace Desktop_app.Views
             }
         }
 
+        public void NavigateToWorkerCard(WorkerCard card)
+        {
+            workerCardControl = card;
+            ContentArea.Content = workerCardControl;
+        }
+
+        // ДОБАВИТЬ эту перегрузку:
+        public void NavigateToWorkerCard(Worker worker, ObservableCollection<Worker> workers, string previousScreen = "WorkerManagement", UserControl previousControl = null)
+        {
+            workerCardControl = new WorkerCard(apiService, worker, workers, previousScreen, previousControl);
+            ContentArea.Content = workerCardControl;
+        }
+
+        public void NavigateToAddWorker()
+        {
+            ContentArea.Content = addWorkerControl;
+        }
+
+        public void NavigateToWorkersList()
+        {
+            ContentArea.Content = workersListControl;
+            workersListControl.RefreshWorkers();
+        }
+
+        public void NavigateToCreateEvent(Worker worker)
+        {
+            eventCardControl = new CreateEvent(apiService, worker);
+            ContentArea.Content = eventCardControl;
+        }
+
         public void NavigateBack()
         {
             ContentArea.Content = workerManagementControl;

@@ -22,13 +22,15 @@ namespace Desktop_app.Views
     public partial class WorkerEvents : UserControl
     {
         private Worker selectedWorker;
+        private UserControl previousControl;
         public WorkerEvents()
         {
             InitializeComponent();
         }
-        public void SetWorker(Worker worker)
+        public void SetWorker(Worker worker,UserControl previousControl = null)
         {
             selectedWorker = worker;
+            this.previousControl = previousControl;
             TitleBlock.Text = $"События сотрудника: {worker.FullName}";
 
             // Просто устанавливаем ItemsSource напрямую
