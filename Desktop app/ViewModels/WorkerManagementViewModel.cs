@@ -237,5 +237,24 @@ namespace Desktop_app.ViewModels
 
             Workers = new ObservableCollection<Worker>(set);
         }
+
+        public async Task ReloadWorkers()
+        {
+            var nodes = await apiService.GetSubdepartmentsAsync();
+
+            Nodes.Clear();
+
+            List<Node> rootNodes = new List<Node>();
+
+            foreach (var node in nodes)
+            {
+                if (!node.ParentId.HasValue)
+                {
+                    rootNodes.Add(node);
+                }
+            }
+            Nodes = new ObservableCollection<Node>(rootNodes);
+            LoadAllWorkers();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Desktop_app.Models;
+using Desktop_app.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,20 +23,36 @@ namespace Desktop_app.Views
     public partial class WorkerEvents : UserControl
     {
         private Worker selectedWorker;
-        public WorkerEvents()
+        private IApiService apiService;
+        private List<Event> events;
+        public WorkerEvents(IApiService apiService, Worker worker)
         {
             InitializeComponent();
-        }
-        public void SetWorker(Worker worker)
-        {
+            this.apiService = apiService;
             selectedWorker = worker;
             TitleBlock.Text = $"События сотрудника: {worker.FullName}";
+            SetEvents();
+        }
 
-            // Просто устанавливаем ItemsSource напрямую
-            if (worker.Events != null && worker.Events.Count > 0)
+        public async Task SetEvents()
+        {
+            await RefreshEvents();
+        }
+
+        private void OnBackClicked(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.GoBack();
+        }
+
+        public async Task RefreshEvents()
+        {
+            var events = await apiService.GetWorkerEventsAsync(selectedWorker.WorkerId);
+            this.events = events;
+
+            if (events != null && events.Count > 0)
             {
                 // Если есть события — показываем их
-                EventsDataGrid.ItemsSource = worker.Events;
+                EventsDataGrid.ItemsSource = events;
                 EmptyMessage.Visibility = Visibility.Collapsed;
             }
             else
@@ -43,11 +60,6 @@ namespace Desktop_app.Views
                 // Если нет событий — показываем сообщение
                 EmptyMessage.Visibility = Visibility.Visible;
             }
-        }
-
-        private void OnBackClicked(object sender, RoutedEventArgs e)
-        {
-            MainWindow.Instance.GoBack();
         }
     }
 }

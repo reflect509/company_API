@@ -17,11 +17,9 @@ namespace Desktop_app.Views
 
         private readonly IApiService apiService;
         private WorkerManagement workerManagementControl;
-        private WorkerCard workerCardControl;
-        private CreateEvent eventCardControl;
         private WorkersListControl workersListControl;
-        private AddWorkerControl addWorkerControl;
-
+        public WorkersListControl CurrentWorkersListControl { get; set; }
+        public WorkerCardViewModel CurrentWorkerCardViewModel { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -32,7 +30,6 @@ namespace Desktop_app.Views
             // Инициализируем контролы
             workerManagementControl = new WorkerManagement();
             workersListControl = new WorkersListControl();
-            addWorkerControl = new AddWorkerControl();
 
             // По умолчанию показываем WorkerManagement
             ContentArea.Content = workerManagementControl;

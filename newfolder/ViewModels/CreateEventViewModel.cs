@@ -17,7 +17,6 @@ namespace Desktop_app.ViewModels
     public class CreateEventViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private UserControl previousControl;
         private readonly IApiService apiService;
         private readonly int workerId;
         private readonly Worker worker;
@@ -104,9 +103,9 @@ namespace Desktop_app.ViewModels
                 };
 
                 await apiService.CreateWorkerEventAsync(workerId, newEvent);
-
+                await MainWindow.Instance.CurrentWorkerCardViewModel.LoadEventsAsync(worker);
                 MessageBox.Show("Событие успешно создано.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                CloseWindow();
+                OnCancelClicked();
             }
             catch (Exception ex)
             {
@@ -132,23 +131,8 @@ namespace Desktop_app.ViewModels
 
         private void OnCancelClicked()
         {
-            CloseWindow();
-        }
-
-        public void SetPreviousControl(UserControl control)
-        {
-            previousControl = control;
-        }
-
-        private void CloseWindow()
-        {
-            //if (previousControl != null)
-            //{
-            //    MainWindow.Instance.ContentArea.Content = previousControl;
-            //}
             MainWindow.Instance.GoBack();
         }
-
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

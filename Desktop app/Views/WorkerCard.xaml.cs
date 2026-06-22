@@ -27,14 +27,16 @@ namespace Desktop_app.Views
 
         private IApiService apiService;
         private Worker selectedWorker;
+        private WorkerCardViewModel vm;
         public WorkerCard(IApiService apiService, Worker selectedWorker, 
             ObservableCollection<Worker> workers)
         {
             InitializeComponent();
             this.apiService = apiService;
             this.selectedWorker = selectedWorker;
-
-            this.DataContext = new WorkerCardViewModel(apiService, selectedWorker, workers);
+            var viewModel = new WorkerCardViewModel(apiService, selectedWorker, workers);
+            this.DataContext = viewModel;
+            this.vm = viewModel;
         }
 
         private void Phone_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -88,23 +90,20 @@ namespace Desktop_app.Views
 
         private void OnEventsClicked(object sender, RoutedEventArgs e)
         {
-            var vm = (WorkerCardViewModel)this.DataContext;
-
             if (vm.SelectedWorker == null)
             {
                 MessageBox.Show("Сотрудник не выбран", "Ошибка");
                 return;
             }
 
-            var eventsControl = new WorkerEvents();
-            eventsControl.SetWorker(vm.Workers[0]);
+            var eventsControl = new WorkerEvents(apiService, vm.SelectedWorker);     
             MainWindow.Instance.Navigate(eventsControl);
         }
 
         private async void OnDeleteWorkerClicked(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show(
-                $"Вы уверены, что хотите удалить сотрудника {selectedWorker.FullName}?",
+                $"Вы уверены, что хотите удалить сотрудника {vm.SelectedWorker.FullName}?",
                 "Подтверждение удаления",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
@@ -119,6 +118,10 @@ namespace Desktop_app.Views
                 if (success)
                 {
                     MessageBox.Show("Сотрудник успешно удалён", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (MainWindow.Instance.CurrentWorkersListControl != null)
+                    {
+                        await MainWindow.Instance.CurrentWorkersListControl.RefreshWorkers();
+                    }
                     MainWindow.Instance.GoBack();
                 }
                 else

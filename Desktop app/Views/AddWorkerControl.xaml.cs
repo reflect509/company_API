@@ -34,7 +34,7 @@ namespace Desktop_app.Views
             }
         }
 
-        private void OnSaveClicked(object sender, RoutedEventArgs e)
+        private async void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(FullNameBox.Text) ||
         string.IsNullOrWhiteSpace(EmailBox.Text) ||
@@ -62,7 +62,7 @@ namespace Desktop_app.Views
                 };
 
                 apiService.CreateWorkerAsync(newWorker); // или CreateWorker если будет метод
-
+                MainWindow.Instance.CurrentWorkersListControl.RefreshWorkers();
                 MessageBox.Show("Сотрудник добавлен", "Успех");
                 MainWindow.Instance.GoBack();
             }

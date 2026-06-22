@@ -31,8 +31,10 @@ namespace Desktop_app.ViewModels
         public WorkerCardViewModel(IApiService apiService, Worker selectedWorker, ObservableCollection<Worker> workers)
         {
             this.apiService = apiService;
+            MainWindow.Instance.CurrentWorkerCardViewModel = this;
             LoadEventsAsync(selectedWorker);
             originalWorker = selectedWorker;
+            SelectedWorker = selectedWorker.Clone();
 
             LoadWorkers(selectedWorker, workers);            
             SaveWorkerCommand = new RelayCommand<Worker>(OnSaveChangesClicked);
@@ -119,7 +121,11 @@ namespace Desktop_app.ViewModels
                 if (result)
                 {
                     originalWorker.CopyFrom(SelectedWorker);
-                    MessageBox.Show("Данные успешно сохранены.");                    
+                    MessageBox.Show("Данные успешно сохранены.");  
+                    if (MainWindow.Instance.CurrentWorkersListControl != null)
+                    {
+                        await MainWindow.Instance.CurrentWorkersListControl.RefreshWorkers();
+                    }
                 }                    
                 else
                     MessageBox.Show("Ошибка сохранения данных.");
@@ -143,7 +149,7 @@ namespace Desktop_app.ViewModels
         }
         private async void OnCreateEventClicked()
         {
-            MainWindow.Instance.Navigate(new CreateEvent(apiService, selectedWorker));
+            MainWindow.Instance.Navigate(new CreateEvent(apiService, SelectedWorker));
         }
         private void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         {

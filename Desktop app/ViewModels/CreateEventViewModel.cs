@@ -17,7 +17,6 @@ namespace Desktop_app.ViewModels
     public class CreateEventViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private UserControl previousControl;
         private readonly IApiService apiService;
         private readonly int workerId;
         private readonly Worker worker;
@@ -104,7 +103,7 @@ namespace Desktop_app.ViewModels
                 };
 
                 await apiService.CreateWorkerEventAsync(workerId, newEvent);
-
+                await MainWindow.Instance.CurrentWorkerCardViewModel.LoadEventsAsync(worker);
                 MessageBox.Show("Событие успешно создано.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 OnCancelClicked();
             }

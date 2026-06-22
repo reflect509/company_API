@@ -10,7 +10,6 @@ namespace Desktop_app.Views
     {
         private IApiService apiService;
         private List<Node> subdepartments;
-        private WorkersListControl previousControl; // Сохраняем WorkersList
 
 
         public AddWorkerControl()
@@ -64,20 +63,9 @@ namespace Desktop_app.Views
 
                 apiService.CreateWorkerAsync(newWorker); // или CreateWorker если будет метод
 
-                MessageBox.Show("Сотрудник добавлен", "Успех"); 
-                if (previousControl != null)
-                {
-                    previousControl.RefreshWorkers();
-                    //MainWindow.Instance.ContentArea.Content = previousControl;
-                    MainWindow.Instance.GoBack();
-                }
-                else
-                {
-                    //var workersListControl = new WorkersListControl();
-                    //workersListControl.RefreshWorkers();
-                    //MainWindow.Instance.ContentArea.Content = workersListControl;
-                    MainWindow.Instance.GoBack();
-                }
+                MessageBox.Show("Сотрудник добавлен", "Успех");
+                MainWindow.Instance.CurrentWorkersListControl.RefreshWorkers();
+                MainWindow.Instance.GoBack();
             }
             catch (Exception ex)
             {
@@ -87,9 +75,6 @@ namespace Desktop_app.Views
 
         private void OnCancelClicked(object sender, RoutedEventArgs e)
         {
-            // Возврат к списку сотрудников
-            //var workersListControl = new WorkersListControl();
-            //MainWindow.Instance.ContentArea.Content = workersListControl;
             MainWindow.Instance.GoBack();
         }
     }

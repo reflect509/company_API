@@ -18,6 +18,7 @@ namespace Desktop_app.Views
         {
             InitializeComponent();
             apiService = new ApiService(new HttpClient());
+            MainWindow.Instance.CurrentWorkersListControl = this; // Ссылка на текущий контрол для обновления списка
             vm = new WorkerManagementViewModel(apiService);
             this.DataContext = vm;
 
@@ -30,12 +31,12 @@ namespace Desktop_app.Views
                 }
             };
 
-            LoadWorkers();
+            RefreshWorkers();
         }
 
-        private void LoadWorkers()
+        private async Task LoadWorkers()
         {
-            vm.LoadAllWorkers();
+            await vm.ReloadWorkers();
         }
 
         private void OnAddWorkerClicked(object sender, RoutedEventArgs e)
@@ -48,9 +49,9 @@ namespace Desktop_app.Views
             MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, vm.Workers));
         }
 
-        public void RefreshWorkers()
+        public async Task RefreshWorkers()
         {
-            LoadWorkers();
+            await LoadWorkers();
         }
     }
 }

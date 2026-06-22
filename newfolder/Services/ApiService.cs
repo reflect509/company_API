@@ -1,0 +1,138 @@
+﻿using Desktop_app.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace Desktop_app.Services
+{
+    public class ApiService : IApiService
+    {
+        private readonly HttpClient httpClient;
+
+        public ApiService(HttpClient httpClient)
+        {
+            this.httpClient = httpClient;
+            httpClient.BaseAddress = new Uri("https://localhost:10020/api/v1/");
+        }
+
+        public async Task<IEnumerable<Node>> GetSubdepartmentsAsync()
+        {
+            HttpResponseMessage response = await httpClient.GetAsync("Subdepartments");
+            if (response.IsSuccessStatusCode)
+            {
+                var subdepartments = await response.Content.ReadFromJsonAsync<IEnumerable<Node>>();
+                return subdepartments;
+            }
+            else
+            {
+                throw new Exception(response.ReasonPhrase);
+            }
+        }
+        public async Task<bool> UpdateWorker(Worker worker)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(worker);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PatchAsync($"Workers/{worker.WorkerId}", content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // Можно логировать ошибку
+                Console.WriteLine(ex);
+                return false;
+            }
+        }
+
+        public async Task<Event> CreateWorkerEventAsync(int workerId, Event ev)
+        {
+            var json = JsonSerializer.Serialize(ev);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(
+                $"Workers/{workerId}/events",
+                content);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<Event>();
+        }
+
+        public async Task<List<Event>> GetWorkerEventsAsync(int workerId)
+        {
+            var response = await httpClient
+                .GetAsync($"Workers/{workerId}/events");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<Event>>();
+        }
+
+        public async Task<bool> LoginAsync(string username, string password)
+        {
+            try
+            {
+                var loginRequest = new { UserName = username, UserPassword = password };
+                var json = JsonSerializer.Serialize(loginRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("SignIn", content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Login Error: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<Worker> CreateWorkerAsync(Worker worker)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(worker);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("Workers", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<Worker>();
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Server error: {response.StatusCode} - {errorResponse}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка добавления сотрудника: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> DeleteWorkerAsync(int workerId)
+        {
+            try
+            {
+                var response = await httpClient.DeleteAsync($"Workers/{workerId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Delete error: {ex.Message}");
+                return false;
+            }
+        }
+    }
+}

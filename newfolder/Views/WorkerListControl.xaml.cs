@@ -12,13 +12,13 @@ namespace Desktop_app.Views
     {
         private WorkerManagementViewModel vm;
         private IApiService apiService;
-        private WorkersListControl previousControl; // Сохраняем WorkersList
 
 
         public WorkersListControl()
         {
             InitializeComponent();
             apiService = new ApiService(new HttpClient());
+            MainWindow.Instance.CurrentWorkersListControl = this; // Ссылка на текущий контрол для обновления списка
             vm = new WorkerManagementViewModel(apiService);
             this.DataContext = vm;
 
@@ -31,7 +31,7 @@ namespace Desktop_app.Views
                 }
             };
 
-            LoadWorkers();
+            RefreshWorkers();
         }
 
         private void LoadWorkers()
@@ -41,16 +41,12 @@ namespace Desktop_app.Views
 
         private void OnAddWorkerClicked(object sender, RoutedEventArgs e)
         {
-            //var addWorkerControl = new AddWorkerControl(); // Передаём this
-            //MainWindow.Instance.ContentArea.Content = addWorkerControl;
             MainWindow.Instance.Navigate(new AddWorkerControl());
         }
 
         private void OpenWorkerCard(Worker worker)
         {
-            //var workerCard = new WorkerCard(apiService, worker, vm.Workers, "WorkersList");
-            //MainWindow.Instance.ContentArea.Content = workerCard;
-            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, vm.Workers, "WorkersList"));
+            MainWindow.Instance.Navigate(new WorkerCard(apiService, worker, vm.Workers));
         }
 
         public void RefreshWorkers()
